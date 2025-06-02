@@ -66,7 +66,7 @@ struct SignUpView : View {
             }
             .padding(.horizontal)
             
-            //google or apple sign up
+            //google sign up
             VStack(spacing: 12) {
                 Button(action: {
                 }) {
@@ -74,20 +74,6 @@ struct SignUpView : View {
                         Image("google")
                             .renderingMode(.original)
                         Text("Continue with Google")
-                            .foregroundColor(.black)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color(.systemGray5))
-                    .cornerRadius(10)
-                }
-                
-                Button(action: {
-                }) {
-                    HStack {
-                        Image(systemName: "applelogo")
-                            .foregroundColor(.black)
-                        Text("Continue with Apple")
                             .foregroundColor(.black)
                     }
                     .frame(maxWidth: .infinity)
