@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct LogInView: View {
-    @State private var userID = ""
+    @State private var email = ""
     @State private var password = ""
+    @EnvironmentObject var viewModel: AuthViewModel
 
     var body: some View {
         VStack(spacing: 30) {
@@ -30,7 +31,7 @@ struct LogInView: View {
                     .font(.headline)
                     .font(.system(size: 20, weight: .bold))
                 
-                Text("Enter your userID and password")
+                Text("Enter your email and password")
                     .font(.subheadline)
             }
             
@@ -38,7 +39,7 @@ struct LogInView: View {
             
             // user entry
             VStack(spacing: 12) {
-                TextField("Enter userID", text: $userID)
+                TextField("Enter email", text: $email)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
@@ -51,8 +52,13 @@ struct LogInView: View {
             .padding(.horizontal)
 
             // continue button
-            Button(action: {
-            }) {
+            Button {
+                Task {
+                    do {
+                        try await viewModel.logIn(withEmail: email, password: password)
+                    }
+                }
+            } label: {
                 Text("Continue")
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -62,6 +68,7 @@ struct LogInView: View {
             }
             .padding(.horizontal)
             .padding(.top, 10)
+
 
             // forgot password + sign up here
             VStack(spacing: 4) {
@@ -99,7 +106,7 @@ struct LogInView: View {
             }
             .padding(.horizontal)
 
-            // google and apple sign in
+            // google sign in
             VStack(spacing: 12) {
                 Button(action: {
                 }) {

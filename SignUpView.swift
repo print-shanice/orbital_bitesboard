@@ -43,7 +43,7 @@ struct SignUpView : View {
                 .cornerRadius(10)
             
             //continue button
-            NavigationLink(destination: ContinueSignUpView()) {
+            NavigationLink(destination: ContinueSignUpView(email: email)) {
                            Text("Continue")
                                .foregroundColor(.white)
                                .padding()
@@ -104,6 +104,7 @@ struct SignUpView : View {
         .padding()
     }
 }
+
 
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
