@@ -8,13 +8,21 @@
 import SwiftUI
 
 struct ContinueSignUpView: View {
+    let email: String
     @State private var userID = ""
     @State private var password = ""
+    @State private var shouldNavigate = false
+    @State private var errorMessage: String?
+    @State private var showAlert = false
+
+    @EnvironmentObject var viewModel: AuthViewModel
     
+
     var body: some View {
         VStack(spacing: 30) {
-            Spacer()
-            //title
+            Spacer(minLength: 80)
+
+            // title
             HStack(spacing: 0) {
                 Text("Become a ")
                     .foregroundColor(.black)
@@ -25,52 +33,102 @@ struct ContinueSignUpView: View {
             }
             .font(.system(size: 32, weight: .bold))
             .padding(.bottom, 8)
-            
-            Spacer(minLength: 40)
-            //create account
-            VStack(spacing:12){
+
+            // create account
+            VStack(spacing: 12) {
                 Text("Create an account")
                     .font(.headline)
                     .font(.system(size: 20, weight: .bold))
 
                 Text("Create personalised UserID")
                     .font(.subheadline)
-                
+
                 TextField("Enter userID", text: $userID)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
-                
+
                 Text("Create secure password")
                     .font(.subheadline)
-                
+
                 TextField("Enter password", text: $password)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
             }
+            .padding(.horizontal)
+
+            // continue button
             Button(action: {
-            }) {
-                Text("Continue")
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.black)
-                    .cornerRadius(10)
+                Task {
+                    guard !userID.isEmpty else {
+                        errorMessage = "UserID cannot be empty."
+                        showAlert = true
+                        return
+                    }
+
+                    guard password.count >= 6 else {
+                        errorMessage = "Password must be at least 6 characters."
+                        showAlert = true
+                        return
+                    }
+                    
+                    guard isValidEmail(email) else {
+                        errorMessage = "Invalid email address. Please go back and try again."
+                        showAlert = true
+                        return
+                    }
+
+                    do {
+                        try await viewModel.createUser(
+                            withEmail: email,
+                            password: password,
+                            username: userID
+                        )
+                        shouldNavigate = true
+                        } catch {
+                         errorMessage = error.localizedDescription
+                             showAlert = true
+                        }
+                    }
+                }) {
+                    Text("Continue")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.black)
+                        .cornerRadius(10)
             }
+
             .padding(.horizontal)
             .padding(.top, 10)
-            
+
             Spacer()
-            .padding(.top)
+                .padding(.top)
         }
+        .navigationDestination(isPresented: $shouldNavigate) {
+            VerifyEmailView()
+        }
+        
+        //popup for failed sign up
+        .alert("Sign Up Failed", isPresented: $showAlert, actions: {
+            Button("OK", role: .cancel) { }
+        }, message: {
+            Text(errorMessage ?? "An unknown error occurred.")
+        })
     }
-    
 }
+
+func isValidEmail(_ email: String) -> Bool {
+    let emailRegEx = #"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
+    return NSPredicate(format: "SELF MATCHES %@", emailRegEx).evaluate(with: email)
+}
+
 
 
 struct ContinueSignUpView_Previews: PreviewProvider {
     static var previews: some View {
-        ContinueSignUpView()
+        ContinueSignUpView(email: "test")
+            .environmentObject(AuthViewModel())
     }
 }
