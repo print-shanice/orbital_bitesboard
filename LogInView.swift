@@ -114,20 +114,6 @@ struct LogInView: View {
                     .background(Color(.systemGray5))
                     .cornerRadius(10)
                 }
-                
-                Button(action: {
-                }) {
-                    HStack {
-                        Image(systemName: "applelogo")
-                            .foregroundColor(.black)
-                        Text("Continue with Apple")
-                            .foregroundColor(.black)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color(.systemGray5))
-                    .cornerRadius(10)
-                }
             }
             .padding(.horizontal)
 
