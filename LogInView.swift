@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import GoogleSignInSwift
 
 struct LogInView: View {
     @State private var email = ""
     @State private var password = ""
     @EnvironmentObject var viewModel: AuthViewModel
+    @State private var errorMessage: String?
+    @State private var showAlert = false
+    @State private var isLoading = false
 
     var body: some View {
         VStack(spacing: 30) {
@@ -54,9 +58,15 @@ struct LogInView: View {
             // continue button
             Button {
                 Task {
+                    let trimmedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
                     do {
-                        try await viewModel.logIn(withEmail: email, password: password)
+                        isLoading = true
+                        try await viewModel.logIn(withEmail: trimmedEmail, password: password)
+                    } catch{
+                        errorMessage = error.localizedDescription
+                        showAlert = true
                     }
+                    isLoading = false
                 }
             } label: {
                 Text("Continue")
@@ -68,7 +78,18 @@ struct LogInView: View {
             }
             .padding(.horizontal)
             .padding(.top, 10)
-
+            
+            //alert for failed login
+            .alert("Login Error", isPresented: $showAlert) {
+                            Button("OK", role: .cancel) { }
+                        } message: {
+                            Text(errorMessage ?? "An unkown error occured")
+                        }
+            //loading progress
+            if isLoading {
+                ProgressView()
+                    .padding(.top)
+            }
 
             // forgot password + sign up here
             VStack(spacing: 4) {
@@ -109,6 +130,14 @@ struct LogInView: View {
             // google sign in
             VStack(spacing: 12) {
                 Button(action: {
+                    Task{
+                        do {
+                            try await viewModel.signInWithGoogle()
+                            
+                        } catch {
+                            errorMessage = error.localizedDescription 
+                        }
+                    }
                 }) {
                     HStack {
                         Image("google")
