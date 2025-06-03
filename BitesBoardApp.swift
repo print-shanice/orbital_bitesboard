@@ -12,13 +12,12 @@ import Firebase
 import FirebaseCore
 import FirebaseAuth
 import FirebaseFirestore
+import GoogleSignIn
 
 @main
 struct BitesBoardApp: App {
-    
-    init() {
-        FirebaseApp.configure()
-    }
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    init() {}
     @StateObject var viewModel = AuthViewModel()
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -35,12 +34,26 @@ struct BitesBoardApp: App {
 
     var body: some Scene {
        WindowGroup {
-            NavigationStack {
-                LogInView()
+           if viewModel.onGoingSession {
+               HomeView()
+                   .environmentObject(viewModel)
+           } else {
+               NavigationView {
+                   LogInView()
+               }
+               .environmentObject(viewModel)
            }
-            .environmentObject(viewModel)
         }
+    }
 }
 
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+        return true
+    }
 
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        return GIDSignIn.sharedInstance.handle(url)
+    }
 }
