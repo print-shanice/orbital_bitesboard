@@ -12,7 +12,7 @@ struct User : Identifiable, Codable {
     let email : String
     
     //account profile details
-    var dietaryRestrictions : [String]? //store dietary restrictions as array
+    var dietaryRestrictions : [String]?
     var username : String
     var savedLocations : [Location]?
     var profilePicture : URL?

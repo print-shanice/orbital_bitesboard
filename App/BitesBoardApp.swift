@@ -35,7 +35,7 @@ struct BitesBoardApp: App {
     var body: some Scene {
        WindowGroup {
            if viewModel.onGoingSession {
-               HomeView()
+             MainTabView()
                    .environmentObject(viewModel)
            } else {
                NavigationView {
