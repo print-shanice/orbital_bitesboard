@@ -8,6 +8,20 @@
 import SwiftUI
 
 struct FeedCell: View {
+    let review : Review
+    @State var isBookmarked : Bool = false
+    @State var isLiked : Bool = false
+    @State private var likesCount : Int = 0
+    var onReviewUpdate: (UUID, Bool, Int, Bool) -> Void
+    
+    init(review:Review, onReviewUpdate: @escaping(UUID, Bool, Int, Bool) -> Void){
+        self.review = review
+        self._isBookmarked = State(initialValue: review.isBookmarked)
+        self._isLiked = State(initialValue: review.isLiked)
+        self._likesCount = State(initialValue: review.likesCount)
+        self.onReviewUpdate = onReviewUpdate
+    }
+    
     var body: some View {
         VStack(spacing: 10){
         //pfp, username and restaraunt
@@ -18,29 +32,34 @@ struct FeedCell: View {
                     .frame(width: 40, height: 40)
                     .clipShape(Circle())
                 
-                Text("Janice")
+                Text(review.userName)
                     .font(.footnote)
                     .fontWeight(.bold)
                 Text("at")
                     .font(.footnote)
-                Text("Ikseoyang")
+                Text(review.restaurantName)
                     .font(.footnote)
                     .fontWeight(.bold)
                 
                 Spacer()
             }
             .padding(.leading)
+            
         //food photo
             ZStack(alignment: .bottomLeading){
-                Image("food")
+                Image(review.foodPhotoName)
                     .resizable()
                     .clipShape(Rectangle())
                     .scaledToFill()
                     .frame(height: 250)
                     .cornerRadius(10)
                     .overlay(alignment: .topTrailing){
-                        Button(action: {}){
-                            Image(systemName: "bookmark")
+                        Button(action: {
+                            print("hi")
+                            isBookmarked.toggle()
+                            onReviewUpdate(review.id, isLiked, likesCount, isBookmarked)
+                        }){
+                            Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
                                 .resizable()
                                 .frame(width: 30, height: 40)
                                 .foregroundStyle(.black.opacity(0.7))
@@ -58,28 +77,42 @@ struct FeedCell: View {
         //caption and likes
             VStack{
                 HStack {
-                    Text("zhen zhen would approve")
+                    Text(review.caption)
                         .font(.subheadline)
                     Spacer()
                 }
                 .padding(.leading)
                 
                 HStack {
-                    Button(action: {}){
-                        Image(systemName: "heart.fill")
+                    Button(action: {
+                        print("hi")
+                        isLiked.toggle()
+                        if isLiked {
+                            likesCount += 1
+                        } else {
+                            likesCount -= 1
+                        }
+                        onReviewUpdate(review.id, isLiked, likesCount, isBookmarked)
+                    }){
+                        Image(systemName: isLiked ? "heart.fill" : "heart")
                             .resizable()
                             .frame(width: 15, height: 15)
-                            .foregroundStyle(.black.opacity(0.7))
+                            .foregroundStyle(isLiked ? .red : .gray)
                     }
+                    .background(Color.orange.opacity(0.5))
+                    Text("\(likesCount) likes")
+                        .font(.footnote)
+                        .fontWeight(.semibold)
                     Spacer()
                 }
                 .padding(.leading)
+                .background(Color.green.opacity(0.2))
             }
             
         }
     }
 }
 
-#Preview {
-    FeedCell()
-}
+
+
+
