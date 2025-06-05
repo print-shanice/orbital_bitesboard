@@ -26,7 +26,7 @@ class AuthViewModel: ObservableObject {
 
                     if let firebaseUser = firebaseUser {
                         Task {
-                            await self?.fetchUserData()
+                            await self?.loadUserData()
                         }
                     } else {
                         self?.currentUser = nil
@@ -98,7 +98,7 @@ class AuthViewModel: ObservableObject {
             
         }
         
-        func fetchUserData() async{
+        func loadUserData() async{
             
         }
 }
