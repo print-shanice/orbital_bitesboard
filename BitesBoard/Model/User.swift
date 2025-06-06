@@ -6,6 +6,7 @@
 
 
 import Foundation
+import FirebaseAuth
 
 struct User : Identifiable, Hashable, Codable {
     let id : String
@@ -19,6 +20,10 @@ struct User : Identifiable, Hashable, Codable {
     var bio : String?
     var following: [String]?
     var followers: [String]?
+    var isCurrentUser: Bool  {
+        guard let currentUID = Auth.auth().currentUser?.uid else { return false }
+        return id == currentUID
+    }
     
     init(id: String,
              email: String,
