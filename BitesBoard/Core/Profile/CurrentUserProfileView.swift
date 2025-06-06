@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CurrentUserProfileView: View {
+    let user: User
     var body: some View {
         NavigationStack {
             VStack{
@@ -16,11 +17,20 @@ struct CurrentUserProfileView: View {
                     //pfp
                     HStack {
                         Spacer()
-                        Image("pfp")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 80, height: 80)
-                            .clipShape(Circle())
+                        if user.profilePicture != nil {
+                            Image(user.profilePicture ?? "profilePicture")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 80, height: 80)
+                                .clipShape(Circle())
+                        } else {
+                            Image(systemName:"person.circle")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 80, height: 80)
+                                .clipShape(Circle())
+                                .foregroundStyle(.gray)
+                        }
                         Spacer()
                     }
                     .padding(.vertical, 10)
@@ -31,7 +41,7 @@ struct CurrentUserProfileView: View {
                         NavigationLink(destination: FollowersView()) {
                             UserStatView(value: 10, title: "Followers")
                         }
-                        Text("@shaball")
+                        Text("@\(user.username)")
                             .font(.footnote)
                             .fontWeight(.bold)
                         
@@ -87,7 +97,7 @@ struct CurrentUserProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing){
                     Button {
-                        
+                        AuthService.shared.signOut()
                     } label: {
                         Image(systemName: "gearshape")
                             .foregroundColor(.black.opacity(0.8))

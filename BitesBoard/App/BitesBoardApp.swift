@@ -18,7 +18,6 @@ import GoogleSignIn
 struct BitesBoardApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {}
-    @StateObject var viewModel = AuthViewModel()
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -34,15 +33,7 @@ struct BitesBoardApp: App {
 
     var body: some Scene {
        WindowGroup {
-           if viewModel.onGoingSession {
-             MainTabView()
-                   .environmentObject(viewModel)
-           } else {
-               NavigationView {
-                   LogInView()
-               }
-               .environmentObject(viewModel)
-           }
+           ContentView()
         }
     }
 }

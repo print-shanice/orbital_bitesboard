@@ -31,15 +31,32 @@ struct ProfileView: View {
                     
                     // followers, following and username
                     HStack(spacing: 20){
-                        NavigationLink(destination: FollowersView()) {
-                            UserStatView(value: 10, title: "Followers")
+                        if user.isCurrentUser {
+                            NavigationLink(destination: FollowersView()) {
+                                UserStatView(value: 10, title: "Followers")
+                            }
+                        } else {
+                            Button (action: {}){
+                                label: do {
+                            }
+                                Text("Follow")
+                            }
                         }
+                        
                         Text(user.username)
                             .font(.footnote)
                             .fontWeight(.bold)
                         
-                        NavigationLink(destination: FollowingView()) {
-                            UserStatView(value: 10, title: "Following")
+                        if user.isCurrentUser {
+                            NavigationLink(destination: FollowingView()) {
+                                UserStatView(value: 10, title: "Following")
+                            }
+                        } else {
+                            Button (action: {}){
+                                label: do {
+                            }
+                                Text("Following")
+                            }
                         }
                     }
                     .padding(.horizontal)
@@ -84,16 +101,6 @@ struct ProfileView: View {
                             }
                         }
                         .padding(.horizontal)
-                    }
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing){
-                    Button {
-                        
-                    } label: {
-                        Image(systemName: "gearshape")
-                            .foregroundColor(.black.opacity(0.8))
                     }
                 }
             }
