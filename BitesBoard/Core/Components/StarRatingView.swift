@@ -22,7 +22,7 @@ struct StarRatingView: View {
                         return "star"
                     }
                 }())
-                .foregroundColor(Color.black.opacity(0.7))
+                .foregroundColor(Color.white.opacity(1))
             }
         }
         .padding(.horizontal, 6)

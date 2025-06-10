@@ -14,6 +14,7 @@ struct FeedCell: View {
     @State var isLiked : Bool = false
     @State private var likesCount : Int = 0
     
+    
     init(review:Review) {
         self.review = review
         self._isBookmarked = State(initialValue: review.isBookmarked)
@@ -24,23 +25,35 @@ struct FeedCell: View {
     var body: some View {
         VStack(spacing: 10){
         //pfp, username and restaraunt
-            HStack{
-                if let user = review.user {
-                    CircularProfileImageView(user: user, size: .small)
+            VStack(spacing: 2) {
+                HStack{
+                    if let user = review.user {
+                        CircularProfileImageView(user: user, size: .small)
+                        
+                        Text(review.user?.username ?? "")
+                            .font(.footnote)
+                            .fontWeight(.bold)
+                    }
                     
-                    Text(review.user?.username ?? "")
+                    Text("at")
+                        .font(.footnote)
+                    Text(review.restaurantName)
                         .font(.footnote)
                         .fontWeight(.bold)
+                    Spacer()
                 }
                 
-                Text("at")
+                HStack{
+                    Text(RelativeDateTimeFormatter()
+                        .localizedString(for: review.timestamp.dateValue(), relativeTo: Date()))
                     .font(.footnote)
-                Text(review.restaurantName)
-                    .font(.footnote)
-                    .fontWeight(.bold)
-                Spacer()
+                    .foregroundColor(.gray)
+                    
+                    Spacer()
+                }
             }
             .padding(.leading)
+            
             
         //food photo
             ZStack(alignment: .bottomLeading){
@@ -58,7 +71,7 @@ struct FeedCell: View {
                             Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
                                 .resizable()
                                 .frame(width: 30, height: 40)
-                                .foregroundStyle(.black.opacity(0.7))
+                                .foregroundStyle(.white.opacity(1))
                         }
                         .padding(.horizontal,10)
                         .padding(.vertical, 10)
@@ -104,6 +117,7 @@ struct FeedCell: View {
         }
     }
 }
+
 
 struct FeedCell_Previews : PreviewProvider {
     static var previews: some View {

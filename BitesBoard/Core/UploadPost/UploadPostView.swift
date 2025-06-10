@@ -14,6 +14,8 @@ struct UploadPostView: View {
     @State private var photoItem:  PhotosPickerItem?
     @StateObject var viewModel = UploadPostViewModel()
     @Binding var tabIndex : Int
+    @State private var rating: Double = 0.0
+
     
     var body: some View {
         VStack{
@@ -25,6 +27,7 @@ struct UploadPostView: View {
                     tabIndex = 0
                 } label: {
                     Text("Cancel")
+                        .foregroundStyle(.red)
                 }
                 Spacer()
                 
@@ -35,7 +38,7 @@ struct UploadPostView: View {
                 
                 Button{
                     Task {
-                        try await viewModel.uploadReview(caption: caption)
+                        try await viewModel.uploadReview(caption: caption, rating: rating)
                         caption = ""
                         viewModel.selectedImage = nil
                         viewModel.postImage = nil
@@ -44,6 +47,7 @@ struct UploadPostView: View {
                 } label: {
                     Text("Upload")
                         .fontWeight(.semibold)
+                        .foregroundStyle(.red)
                 }
             }
             .padding(.horizontal)
@@ -57,9 +61,11 @@ struct UploadPostView: View {
                         .clipped()
                 }
                 
-                StarRatingView(rating: 3.5)
-                    .padding(.top)
+                InteractiveStarRatingView(rating: $rating)
+                
                 TextField("Enter your caption", text: $caption, axis: .vertical)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
             }
             .padding(.horizontal)
         }
