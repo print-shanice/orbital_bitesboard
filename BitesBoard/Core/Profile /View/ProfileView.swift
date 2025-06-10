@@ -29,39 +29,69 @@ struct ProfileView: View {
                     }
                     .padding(.vertical, 10)
                     
-                    
-                    // followers, following and username
-                    HStack(spacing: 20){
+                    // username and location
+                    HStack {
                         if user.isCurrentUser {
                             NavigationLink(destination: FollowersView()) {
-                                UserStatView(value: 10, title: "Followers")
+                                Text("Followers")
+                                    .font(.subheadline)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.gray.opacity(0.5))
+                                    .cornerRadius(8)
+
                             }
                         } else {
-                            Button (action: {}){
-                                label: do {
-                            }
+                            Button(action: {}) {
                                 Text("Follow")
+                                    .font(.subheadline)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(8)
+                                    .foregroundStyle(.red)
                             }
                         }
-                        
-                        Text("@\(user.username ?? "")")
-                            .font(.footnote)
-                            .fontWeight(.bold)
+                        Spacer()
+
+                        VStack(spacing: 4) {
+                            Text("@\(user.username ?? "")")
+                                .font(.footnote)
+                                .fontWeight(.semibold)
+
+                            HStack(spacing: 4) {
+                                Image(systemName: "mappin.and.ellipse")
+                                    .foregroundColor(.gray)
+                                Text(user.country ?? "earth")
+                                    .font(.caption)
+                            }
+                        }
+                        Spacer()
                         
                         if user.isCurrentUser {
                             NavigationLink(destination: FollowingView()) {
-                                UserStatView(value: 10, title: "Following")
+                                Text("Following")
+                                    .font(.subheadline)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.gray.opacity(0.5))
+                                    .cornerRadius(8)
                             }
                         } else {
-                            Button (action: {}){
-                                label: do {
-                            }
+                            Button(action: {}) {
                                 Text("Following")
+                                    .font(.subheadline)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(8)
+                                    .foregroundStyle(.red)
                             }
                         }
                     }
                     .padding(.horizontal)
-                    Divider()
+
+                    
                 }
                 
                 //your favourite bites
