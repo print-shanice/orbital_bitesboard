@@ -19,8 +19,9 @@ struct User : Identifiable, Hashable, Codable {
     var profilePicture : String?
     var bio : String?
     var country: String?
-    var following: [String]?
-    var followers: [String]?
+    var following: [String]? //stored as user ids
+    var followers: [String]? //stored as user ids
+    var favouritedReviews: [String]? //stored as review ids
     var isCurrentUser: Bool  {
         guard let currentUID = Auth.auth().currentUser?.uid else { return false }
         return id == currentUID
@@ -35,7 +36,8 @@ struct User : Identifiable, Hashable, Codable {
              dietaryRestrictions: [String] = [],
 //             savedLocations: [Location]? = nil,
              following: [String]? = nil,
-             followers: [String]? = nil)
+             followers: [String]? = nil,
+             favouritedReviews: [String]? = nil)
             {
         
             self.id = id
@@ -48,6 +50,7 @@ struct User : Identifiable, Hashable, Codable {
             self.country = country
             self.followers = followers
             self.following = following
+            self.favouritedReviews = favouritedReviews
     }
 
 }

@@ -10,16 +10,27 @@ import Firebase
 import FirebaseFirestore
 
 class FeedViewModel: ObservableObject {
+    private let user: User
     @Published var reviews: [Review] = []
     
-    init(){
+    init(user: User, column: HomepageColumn = .forYou){
+        self.user = user
         Task{
-            try await fetchPosts()
+            try await fetchPosts(for: column)
         }
     }
     
     @MainActor
-    func fetchPosts() async throws{
-        self.reviews = try await ReviewService.fetchFeedReviews()
+    func fetchPosts(for column: HomepageColumn) async throws{
+        switch column {
+                case .following:
+                    self.reviews = try await ReviewService.fetchFollowingReviews(uid: user.id)
+                case .friends:
+                    self.reviews = try await ReviewService.fetchFeedReviews()
+                case .favourites:
+                    self.reviews = try await ReviewService.fetchFeedReviews()
+                case .forYou:
+                    self.reviews = try await ReviewService.fetchFeedReviews()
+                }
     }
 }

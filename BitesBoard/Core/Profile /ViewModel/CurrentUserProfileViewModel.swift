@@ -26,4 +26,6 @@ class CurrentUserProfileViewModel: ObservableObject {
             reviews[i].user = self.user
         }
     }
+    
+    
 }
