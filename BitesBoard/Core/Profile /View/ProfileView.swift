@@ -9,12 +9,16 @@ import SwiftUI
 import Kingfisher
 
 struct ProfileView: View {
-    let user: User
-    @StateObject var viewModel: CurrentUserProfileViewModel
+    let currUser : User
+    let targetUser: User
+    @StateObject var ReviewViewModel: CurrentUserProfileViewModel
+    @StateObject var profileViewModel: ProfileViewModel
     
-    init(user: User){
-        self.user = user
-        self._viewModel = StateObject(wrappedValue: CurrentUserProfileViewModel(user: user))
+    init(currUser: User, targetUser: User){
+        self.currUser = currUser
+        self.targetUser = targetUser
+        self._ReviewViewModel = StateObject(wrappedValue: CurrentUserProfileViewModel(user: targetUser))
+        self._profileViewModel = StateObject(wrappedValue: ProfileViewModel(followingUser: currUser, followedUser: targetUser))
     }
     
     var body: some View {
@@ -24,14 +28,14 @@ struct ProfileView: View {
                     //pfp
                     HStack {
                         Spacer()
-                        CircularProfileImageView(user: user, size: .large)
+                        CircularProfileImageView(user: targetUser, size: .large)
                         Spacer()
                     }
                     .padding(.vertical, 10)
                     
                     // username and location
                     HStack {
-                        if user.isCurrentUser {
+                        if targetUser.isCurrentUser {
                             NavigationLink(destination: FollowersView()) {
                                 Text("Followers")
                                     .font(.subheadline)
@@ -42,7 +46,12 @@ struct ProfileView: View {
 
                             }
                         } else {
-                            Button(action: {}) {
+                            Button(action: {
+                                Task {
+                                   try await profileViewModel.toggleFollowing()
+                                    print("DEBUG - Following toggle successful")
+                                }
+                            }) {
                                 Text("Follow")
                                     .font(.subheadline)
                                     .padding(.horizontal, 12)
@@ -55,20 +64,20 @@ struct ProfileView: View {
                         Spacer()
 
                         VStack(spacing: 4) {
-                            Text("@\(user.username ?? "")")
+                            Text("@\(targetUser.username ?? "")")
                                 .font(.footnote)
                                 .fontWeight(.semibold)
 
                             HStack(spacing: 4) {
                                 Image(systemName: "mappin.and.ellipse")
                                     .foregroundColor(.gray)
-                                Text(user.country ?? "earth")
+                                Text(targetUser.country ?? "earth")
                                     .font(.caption)
                             }
                         }
                         Spacer()
                         
-                        if user.isCurrentUser {
+                        if targetUser.isCurrentUser {
                             NavigationLink(destination: FollowingView()) {
                                 Text("Following")
                                     .font(.subheadline)
@@ -103,7 +112,7 @@ struct ProfileView: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
-                            ForEach(viewModel.reviews) { review in
+                            ForEach(ReviewViewModel.reviews) { review in
                                 KFImage(URL(string: review.foodPhoto))
                                     .resizable()
                                     .frame(width:200, height:200)
@@ -123,7 +132,7 @@ struct ProfileView: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
-                            ForEach(viewModel.reviews) { review in
+                            ForEach(ReviewViewModel.reviews) { review in
                                 KFImage(URL(string: review.foodPhoto))
                                     .resizable()
                                     .frame(width:200, height:200)
@@ -139,8 +148,4 @@ struct ProfileView: View {
 }
 
 
-struct ProfileView_Previews : PreviewProvider {
-    static var previews: some View {
-        ProfileView(user: User.MOCK_USERS[0])
-    }
-}
+

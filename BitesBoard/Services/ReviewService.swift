@@ -34,4 +34,30 @@ struct ReviewService{
             return review
         })
     }
+    
+    static func fetchFollowingReviews(uid: String) async throws -> [Review]{
+        let user = try await UserService.fetchUserWithUID(withUID: uid)
+        guard let userFollowing = user.following else { return [] }
+        
+        let snapshot = try await ReviewCollection.whereField("ownerId", in: userFollowing).getDocuments()
+        var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
+        for i in 0..<reviews.count {
+                let user = try await UserService.fetchUserWithUID(withUID: reviews[i].ownerId)
+                reviews[i].user = user
+        }
+        
+        return reviews
+    }
+    
+    static func fetchFriendReviews() async throws -> [Review]{
+        return []
+    }
+    
+    static func fetchForYouReviews() async throws -> [Review]{
+        return []
+    }
+    
+    static func fetchFavouritereviews() async throws -> [Review]{
+        return []
+    }
 }

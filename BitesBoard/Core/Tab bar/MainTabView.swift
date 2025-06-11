@@ -12,7 +12,7 @@ struct MainTabView: View {
     @State private var selectedTabIndex = 0
     var body: some View {
         TabView(selection: $selectedTabIndex) {
-            FeedView()
+            HomepageBarView(user: user)
                 .onAppear {
                     selectedTabIndex = 0
                 }
@@ -20,7 +20,7 @@ struct MainTabView: View {
                     Image(systemName: "house")
                 }.tag(0)
             
-           SearchView()
+            SearchView(user: user)
             .onAppear {
                 selectedTabIndex = 1
             }

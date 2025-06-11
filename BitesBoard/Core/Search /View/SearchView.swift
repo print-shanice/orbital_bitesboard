@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SearchView: View {
+    let user: User
     @State private var searchText: String = ""
     @StateObject var viewModel = SearchViewModel()
     var body: some View {
@@ -35,8 +36,8 @@ struct SearchView: View {
                 .padding(.top, 8)
                 .searchable(text: $searchText, prompt: "Search...")
             }
-            .navigationDestination(for: User.self, destination: { user in
-                ProfileView(user: user)
+            .navigationDestination(for: User.self, destination: { targetUser in
+                ProfileView(currUser: user, targetUser: targetUser)
             })
             .navigationTitle("Explore users")
             .navigationBarTitleDisplayMode(.inline)
@@ -47,6 +48,6 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView()
+        SearchView(user: User.MOCK_USERS[0])
     }
 }

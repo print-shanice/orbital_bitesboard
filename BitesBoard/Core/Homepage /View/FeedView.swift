@@ -9,7 +9,15 @@
 import SwiftUI
 
 struct FeedView: View {
-    @StateObject var viewModel = FeedViewModel()
+    let user: User
+    var column: HomepageColumn
+    @StateObject var viewModel: FeedViewModel
+    
+    init(user: User, column: HomepageColumn) {
+        self.user = user
+        self.column = column
+        self._viewModel = StateObject(wrappedValue: FeedViewModel(user: user))
+    }
     
     var body: some View {
         ScrollView {
@@ -20,12 +28,17 @@ struct FeedView: View {
             }
         }
         .padding(.vertical)
+        .onChange(of: column) {
+            Task {
+                try? await viewModel.fetchPosts(for: column)
+            }
+        }
     }
 }
     
-struct FeedView_Previews: PreviewProvider {
-        static var previews: some View {
-            FeedView()
-        }
-}
+//struct FeedView_Previews: PreviewProvider {
+//        static var previews: some View {
+//            FeedView()
+//        }
+//}
 
