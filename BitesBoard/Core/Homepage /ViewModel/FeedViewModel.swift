@@ -28,9 +28,51 @@ class FeedViewModel: ObservableObject {
                 case .friends:
                     self.reviews = try await ReviewService.fetchFeedReviews()
                 case .favourites:
-                    self.reviews = try await ReviewService.fetchFeedReviews()
+                    self.reviews = try await ReviewService.fetchFavouritereviews(uid: user.id)
                 case .forYou:
                     self.reviews = try await ReviewService.fetchFeedReviews()
                 }
+    }
+    
+    @MainActor
+    func checkIfReviewLiked(reviewId: String) -> Bool {
+        return user.favouritedReviews?.contains(reviewId) ?? false
+    }
+    
+    @MainActor
+    func checkIfReviewBookmarked(reviewId: String) -> Bool {
+        return user.bookmarkedReviews?.contains(reviewId) ?? false
+    }
+    
+    @MainActor
+    func likeReview(reviewId: String) async throws{
+        let uid = user.id
+        do {
+            try await ReviewService.likeReview(reviewId: reviewId, uid: uid)
+        }
+    }
+    
+    @MainActor
+    func unlikeReview(reviewId: String) async throws {
+        let uid = user.id
+        do {
+            try await ReviewService.unlikeReview(reviewId: reviewId, uid: uid)
+        }
+    }
+    
+    @MainActor
+    func bookmarkReview(reviewId: String) async throws {
+        let uid = user.id
+        do {
+            try await ReviewService.bookmarkReview(reviewId: reviewId, uid: uid)
+        }
+    }
+    
+    @MainActor
+    func unbookmarkReview(reviewId: String) async throws {
+        let uid = user.id
+        do {
+            try await ReviewService.unbookmarkReview(reviewId: reviewId, uid: uid)
+        }
     }
 }

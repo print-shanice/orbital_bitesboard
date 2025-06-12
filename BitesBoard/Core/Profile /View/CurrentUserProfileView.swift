@@ -34,15 +34,15 @@ struct CurrentUserProfileView: View {
                     
                     // followers, following and username
                     HStack(spacing: 20){
-                        NavigationLink(destination: FollowersView()) {
-                            UserStatView(value: 10, title: "Followers")
+                        NavigationLink(destination: FollowersView(user: user)) {
+                            UserStatView(value: user.followers?.count ?? 0, title: "Followers")
                         }
                         Text("@\(user.username ?? "NA")")
                             .font(.footnote)
                             .fontWeight(.bold)
                         
-                        NavigationLink(destination: FollowingView()) {
-                            UserStatView(value: 10, title: "Following")
+                        NavigationLink(destination: FollowingView(user: user)) {
+                            UserStatView(value: user.following?.count ?? 0, title: "Following")
                         }
                     }
                     .padding(.horizontal)

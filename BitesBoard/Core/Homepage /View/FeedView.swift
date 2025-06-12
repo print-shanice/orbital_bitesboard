@@ -23,7 +23,7 @@ struct FeedView: View {
         ScrollView {
             LazyVStack(spacing: 32) {
                 ForEach(viewModel.reviews){ post in
-                    FeedCell(review: post)
+                    FeedCell(user: user, review: post, viewModel: viewModel)
                 }
             }
         }

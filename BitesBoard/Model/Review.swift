@@ -18,9 +18,8 @@ struct Review: Identifiable, Hashable, Codable {
     let timestamp: Timestamp
     
     var user: User?
-    var isBookmarked: Bool = false
-    var isLiked: Bool = false
-    var likesCount: Int = 0
+    var bookmarkedBy: [String]?
+    var favouritedBy: [String]?
 
     init(id: String = UUID().uuidString,
          ownerId: String,
@@ -30,9 +29,9 @@ struct Review: Identifiable, Hashable, Codable {
          starRating: Double,
          timestamp: Timestamp,
          user: User? = nil,
-         isBookmarked: Bool = false,
-         isLiked: Bool = false,
-         likesCount: Int = 0) {
+         bookmarkedBy: [String]? = nil,
+         favouritedBy: [String]? = nil,)
+          {
         self.id = id
         self.ownerId = ownerId
         self.restaurantName = restaurantName
@@ -41,9 +40,8 @@ struct Review: Identifiable, Hashable, Codable {
         self.starRating = starRating
         self.timestamp = timestamp
         self.user = user
-        self.isBookmarked = isBookmarked
-        self.isLiked = isLiked
-        self.likesCount = likesCount
+        self.bookmarkedBy = bookmarkedBy
+        self.favouritedBy = favouritedBy
     }
 }
 

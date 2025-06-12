@@ -9,18 +9,13 @@ import SwiftUI
 import Kingfisher
 
 struct FeedCell: View {
+    let user: User
     let review : Review
-    @State var isBookmarked : Bool = false
-    @State var isLiked : Bool = false
-    @State private var likesCount : Int = 0
+    @ObservedObject var viewModel: FeedViewModel
     
-    
-    init(review:Review) {
-        self.review = review
-        self._isBookmarked = State(initialValue: review.isBookmarked)
-        self._isLiked = State(initialValue: review.isLiked)
-        self._likesCount = State(initialValue: review.likesCount)
-    }
+    @State private var isLiked: Bool = false
+        @State private var isBookmarked: Bool = false
+        @State private var likesCount: Int = 0
     
     var body: some View {
         VStack(spacing: 10){
@@ -65,8 +60,14 @@ struct FeedCell: View {
                     .cornerRadius(10)
                     .overlay(alignment: .topTrailing){
                         Button(action: {
-                            print("hi")
                             isBookmarked.toggle()
+                            Task {
+                                if isBookmarked {
+                                    try await viewModel.bookmarkReview(reviewId: review.id)
+                                } else {
+                                    try await viewModel.unbookmarkReview(reviewId: review.id)
+                                }
+                            }
                         }){
                             Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
                                 .resizable()
@@ -95,10 +96,14 @@ struct FeedCell: View {
                     Button(action: {
                         print("hi")
                         isLiked.toggle()
-                        if isLiked {
-                            likesCount += 1
-                        } else {
-                            likesCount -= 1
+                        likesCount += isLiked ? 1 : -1
+                        
+                        Task {
+                            if isLiked {
+                                try await viewModel.likeReview(reviewId: review.id)
+                            } else {
+                                try await viewModel.unlikeReview(reviewId: review.id)
+                            }
                         }
                     }){
                         Image(systemName: isLiked ? "heart.fill" : "heart")
@@ -113,7 +118,11 @@ struct FeedCell: View {
                 }
                 .padding(.leading)
             }
-            
+        }
+        .onAppear {
+            isLiked = review.favouritedBy?.contains(user.id) ?? false
+            isBookmarked = viewModel.checkIfReviewBookmarked(reviewId: review.id)
+            likesCount = review.favouritedBy?.count ?? 0
         }
     }
 }
@@ -121,7 +130,7 @@ struct FeedCell: View {
 
 struct FeedCell_Previews : PreviewProvider {
     static var previews: some View {
-        FeedCell(review: Review.MOCK_REVIEWS[0])
+        FeedCell(user: User.MOCK_USERS[0], review: Review.MOCK_REVIEWS[0], viewModel: FeedViewModel(user: User.MOCK_USERS[0]))
     }
 }
 
