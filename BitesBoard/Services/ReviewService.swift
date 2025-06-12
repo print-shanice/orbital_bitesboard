@@ -29,7 +29,7 @@ struct ReviewService{
     
     static func fetchUserReviews(uid: String ) async throws ->  [Review] {
         let snapshot = try await  ReviewCollection.whereField( "ownerId", isEqualTo: uid).getDocuments()
-        return try  snapshot.documents.compactMap({document in
+        return try snapshot.documents.compactMap({document in
             let review = try document.data(as: Review.self)
             return review
         })
@@ -49,7 +49,11 @@ struct ReviewService{
         return reviews
     }
     
-    static func fetchFriendReviews() async throws -> [Review]{
+    static func fetchFriendReviews(uid: String) async throws -> [Review]{
+        let user = try await UserService.fetchUserWithUID(withUID: uid)
+        guard let userFollowing = user.following else { return [] }
+        
+        
         return []
     }
     
@@ -57,7 +61,58 @@ struct ReviewService{
         return []
     }
     
-    static func fetchFavouritereviews() async throws -> [Review]{
-        return []
+    static func fetchFavouritereviews(uid: String) async throws -> [Review]{
+        let user = try await UserService.fetchUserWithUID(withUID: uid)
+        guard let userFavourited = user.favouritedReviews else { return [] }
+        
+        let snapshot = try await ReviewCollection.whereField("id", in: userFavourited).getDocuments()
+        var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
+        for i in 0..<reviews.count {
+                let user = try await UserService.fetchUserWithUID(withUID: reviews[i].ownerId)
+                reviews[i].user = user
+        }
+        
+        return reviews
     }
+    
+    static func likeReview(reviewId: String, uid: String) async throws {
+        let reviewRef = Firestore.firestore().collection("reviews").document(reviewId)
+        let userRef = Firestore.firestore().collection("users").document(uid)
+
+        let batch = Firestore.firestore().batch()
+        batch.updateData(["favouritedBy": FieldValue.arrayUnion([uid])], forDocument: reviewRef)
+        batch.updateData(["favouritedReviews": FieldValue.arrayUnion([reviewId])], forDocument: userRef)
+        try await batch.commit()
+    }
+
+    static func unlikeReview(reviewId: String, uid: String) async throws {
+        let reviewRef = Firestore.firestore().collection("reviews").document(reviewId)
+        let userRef = Firestore.firestore().collection("users").document(uid)
+
+        let batch = Firestore.firestore().batch()
+        batch.updateData(["favouritedBy": FieldValue.arrayRemove([uid])], forDocument: reviewRef)
+        batch.updateData(["favouritedReviews": FieldValue.arrayRemove([reviewId])], forDocument: userRef)
+        try await batch.commit()
+    }
+    
+    static func bookmarkReview(reviewId: String, uid: String) async throws {
+        let reviewRef = Firestore.firestore().collection("reviews").document(reviewId)
+        let userRef = Firestore.firestore().collection("users").document(uid)
+        
+        let batch = Firestore.firestore().batch()
+        batch.updateData(["bookmarkedBy": FieldValue.arrayUnion([uid])], forDocument: reviewRef)
+        batch.updateData(["bookmarkedReviews": FieldValue.arrayUnion([reviewId])], forDocument: userRef)
+        try await batch.commit()
+    }
+    
+    static func unbookmarkReview(reviewId: String, uid: String) async throws {
+        let reviewRef = Firestore.firestore().collection("reviews").document(reviewId)
+        let userRef = Firestore.firestore().collection("users").document(uid)
+        
+        let batch = Firestore.firestore().batch()
+        batch.updateData(["bookmarkedBy": FieldValue.arrayRemove([uid])], forDocument: reviewRef)
+        batch.updateData(["bookmarkedReviews": FieldValue.arrayRemove([reviewId])], forDocument: userRef)
+        try await batch.commit()
+    }
+
 }

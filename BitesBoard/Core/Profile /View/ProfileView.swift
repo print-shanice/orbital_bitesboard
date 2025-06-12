@@ -35,8 +35,8 @@ struct ProfileView: View {
                     
                     // username and location
                     HStack {
-                        if targetUser.isCurrentUser {
-                            NavigationLink(destination: FollowersView()) {
+                        if targetUser.id == currUser.id {
+                            NavigationLink(destination: FollowersView(user: currUser)) {
                                 Text("Followers")
                                     .font(.subheadline)
                                     .padding(.horizontal, 12)
@@ -49,10 +49,9 @@ struct ProfileView: View {
                             Button(action: {
                                 Task {
                                    try await profileViewModel.toggleFollowing()
-                                    print("DEBUG - Following toggle successful")
                                 }
                             }) {
-                                Text("Follow")
+                                Text(profileViewModel.isFollowing ? "Unfollow" :"Follow")
                                     .font(.subheadline)
                                     .padding(.horizontal, 12)
                                     .padding(.vertical, 6)
@@ -78,7 +77,7 @@ struct ProfileView: View {
                         Spacer()
                         
                         if targetUser.isCurrentUser {
-                            NavigationLink(destination: FollowingView()) {
+                            NavigationLink(destination: FollowingView(user: currUser)) {
                                 Text("Following")
                                     .font(.subheadline)
                                     .padding(.horizontal, 12)
@@ -148,4 +147,8 @@ struct ProfileView: View {
 }
 
 
-
+struct ProfileView_Previews : PreviewProvider {
+    static var previews: some View {
+        ProfileView(currUser: User.MOCK_USERS[0], targetUser: User.MOCK_USERS[0])
+    }
+}
