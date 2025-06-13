@@ -12,6 +12,7 @@ struct Review: Identifiable, Hashable, Codable {
     let id: String
     let ownerId: String
     let restaurantName: String
+    let dietaryTags: [String]?
     let foodPhoto: String
     let caption: String
     let starRating: Double
@@ -24,6 +25,7 @@ struct Review: Identifiable, Hashable, Codable {
     init(id: String = UUID().uuidString,
          ownerId: String,
          restaurantName: String,
+         dietaryTags: [String]? = nil,
          foodPhoto: String,
          caption: String,
          starRating: Double,
@@ -35,6 +37,7 @@ struct Review: Identifiable, Hashable, Codable {
         self.id = id
         self.ownerId = ownerId
         self.restaurantName = restaurantName
+        self.dietaryTags = dietaryTags
         self.foodPhoto = foodPhoto
         self.caption = caption
         self.starRating = starRating

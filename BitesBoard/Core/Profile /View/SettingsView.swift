@@ -11,6 +11,7 @@ struct SettingsView: View {
     let user: User
     @Environment(\.dismiss) var dismiss
     
+    
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 0) {
@@ -34,19 +35,19 @@ struct SettingsView: View {
                 }
 
                 Group {
-                    SettingsRowView(systemImageName: "bookmark", title: "Bookmarks", subtitle: "View your saved posts", destination: AnyView(BookmarkView()))
+                    SettingsRowView(systemImageName: "bookmark", title: "Bookmarks", subtitle: "View your saved posts", destination: AnyView(BookmarkView(user: user)))
                     
                     Divider()
                     
-                    SettingsRowView(systemImageName: "mappin.circle", title: "Saved locations", subtitle: "Edit your saved locations", destination: AnyView(BookmarkView()))
+                    SettingsRowView(systemImageName: "mappin.circle", title: "Saved locations", subtitle: "Edit your saved locations", destination: AnyView(BookmarkView(user: user)))
                     
                     Divider()
                     
-                    SettingsRowView(systemImageName: "lock", title: "Privacy", subtitle: "Edit your privacy settings", destination: AnyView(BookmarkView()))
+                    SettingsRowView(systemImageName: "lock", title: "Privacy", subtitle: "Edit your privacy settings", destination: AnyView(BookmarkView(user: user)))
                     
                     Divider()
                     
-                    SettingsRowView(systemImageName: "fork.knife", title: "Dietary Restrictions", subtitle: "Update your dietary restrictions", destination: AnyView(BookmarkView()))
+                    SettingsRowView(systemImageName: "fork.knife", title: "Dietary Restrictions", subtitle: "Update your dietary restrictions", destination: AnyView(BookmarkView(user: user)))
                     
                     Divider()
                     
@@ -54,11 +55,11 @@ struct SettingsView: View {
                     
                     Divider()
                     
-                    SettingsRowView(systemImageName: "bell", title: "Notifications", subtitle: "Control your notification settings", destination: AnyView(BookmarkView()))
+                    SettingsRowView(systemImageName: "bell", title: "Notifications", subtitle: "Control your notification settings", destination: AnyView(BookmarkView(user: user)))
                     
                     Divider()
                     
-                    SettingsRowView(systemImageName: "envelope", title: "Verify your Account", subtitle: "Verify your email address", destination: AnyView(BookmarkView()))
+                    SettingsRowView(systemImageName: "envelope", title: "Verify your Account", subtitle: "Verify your email address", destination: AnyView(BookmarkView(user: user)))
                     
                     Divider()
                     

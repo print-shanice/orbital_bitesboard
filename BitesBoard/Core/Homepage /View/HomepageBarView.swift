@@ -11,7 +11,15 @@ enum HomepageColumn: String, CaseIterable {
     case friends = "Friends"
     case forYou = "For you"
     case favourites = "Favourites"
+    case bookmarks = "Bookmarks"
 }
+
+extension HomepageColumn {
+    static var visibleCases: [HomepageColumn] {
+        return allCases.filter { $0 != .bookmarks }
+    }
+}
+
 
 struct HomepageBarView: View {
     let user: User
@@ -26,7 +34,7 @@ struct HomepageBarView: View {
     var body: some View {
         VStack {
             HStack {
-                ForEach(HomepageColumn.allCases, id: \.self) { column in
+                ForEach(HomepageColumn.visibleCases, id: \.self) { column in
                     Button(action: {
                         selectedColumn = column
                     }) {
