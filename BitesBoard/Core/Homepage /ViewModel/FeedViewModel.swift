@@ -26,11 +26,13 @@ class FeedViewModel: ObservableObject {
                 case .following:
                     self.reviews = try await ReviewService.fetchFollowingReviews(uid: user.id)
                 case .friends:
-                    self.reviews = try await ReviewService.fetchFeedReviews()
+                    self.reviews = try await ReviewService.fetchFriendReviews(uid: user.id)
                 case .favourites:
                     self.reviews = try await ReviewService.fetchFavouritereviews(uid: user.id)
                 case .forYou:
                     self.reviews = try await ReviewService.fetchFeedReviews()
+                case .bookmarks:
+                    self.reviews = try await ReviewService.fetchBookmarkedReviews(uid: user.id)
                 }
     }
     

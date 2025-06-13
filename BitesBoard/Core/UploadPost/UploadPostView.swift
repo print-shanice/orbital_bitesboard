@@ -10,6 +10,8 @@ import PhotosUI
 
 struct UploadPostView: View {
     @State private var caption = ""
+    @State private var restaurantName = ""
+    @State private var selectedTags: [String] = []
     @State private var imagePickerPresented = false
     @State private var photoItem:  PhotosPickerItem?
     @StateObject var viewModel = UploadPostViewModel()
@@ -18,59 +20,84 @@ struct UploadPostView: View {
 
     
     var body: some View {
-        VStack{
-            HStack{
-                Button{
-                    caption = ""
-                    viewModel.selectedImage = nil
-                    viewModel.postImage = nil
-                    tabIndex = 0
-                } label: {
-                    Text("Cancel")
-                        .foregroundStyle(.red)
-                }
-                Spacer()
-                
-                Text("New Post")
-                    .fontWeight(.semibold)
-                
-                Spacer()
-                
-                Button{
-                    Task {
-                        try await viewModel.uploadReview(caption: caption, rating: rating)
+        ScrollView {
+            VStack{
+                HStack{
+                    Button{
                         caption = ""
                         viewModel.selectedImage = nil
                         viewModel.postImage = nil
                         tabIndex = 0
+                    } label: {
+                        Text("Cancel")
+                            .foregroundStyle(.red)
                     }
-                } label: {
-                    Text("Upload")
+                    Spacer()
+                    
+                    Text("New Post")
                         .fontWeight(.semibold)
-                        .foregroundStyle(.red)
+                    
+                    Spacer()
+                    
+                    Button{
+                        Task {
+                            try await viewModel.uploadReview(restaurantName: restaurantName, caption: caption, rating: rating, dietaryTags: selectedTags)
+                            caption = ""
+                            viewModel.selectedImage = nil
+                            viewModel.postImage = nil
+                            tabIndex = 0
+                        }
+                    } label: {
+                        Text("Upload")
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.red)
+                    }
                 }
-            }
-            .padding(.horizontal)
-            
-            VStack(alignment: .leading) {
-                if let image = viewModel.postImage {
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 350, height: 350)
-                        .clipped()
+                .padding(.leading)
+                .padding(.trailing)
+                .padding(.horizontal)
+                .padding(.bottom, 20)
+                
+                VStack(alignment: .leading) {
+                    if let image = viewModel.postImage {
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 350, height: 350)
+                            .clipped()
+                    }
+                    
+                    InteractiveStarRatingView(rating: $rating)
+                    
+                    TextField("Enter your caption", text: $caption, axis: .vertical)
+                        .disableAutocorrection(true)
+                        .autocapitalization(.none)
                 }
+                .padding(.horizontal)
+                .padding(.leading)
+                .padding(.bottom, 10)
                 
-                InteractiveStarRatingView(rating: $rating)
-                
-                TextField("Enter your caption", text: $caption, axis: .vertical)
-                    .disableAutocorrection(true)
-                    .autocapitalization(.none)
+                HStack(spacing:0){
+                    TextField("Restaurant", text: $restaurantName)
+                        .disableAutocorrection(true)
+                        .autocapitalization(.none)
+                        .font(.headline)
+                        .padding(.horizontal, 8)
+                        .frame(height: 50)
+                        .frame(width: 160)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray)
+                        )
+                    
+                    DietaryTagsMenuView(selectedTags: $selectedTags)
+                }
+                .padding(.horizontal)
+                .padding(.leading)
             }
-            .padding(.horizontal)
+            .padding(.top, 30)
+            .padding(.bottom, 180)
         }
-        .padding(.bottom, 200)
-        
         .onAppear{
             imagePickerPresented.toggle()
         }

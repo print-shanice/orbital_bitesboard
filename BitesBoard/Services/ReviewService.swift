@@ -52,9 +52,20 @@ struct ReviewService{
     static func fetchFriendReviews(uid: String) async throws -> [Review]{
         let user = try await UserService.fetchUserWithUID(withUID: uid)
         guard let userFollowing = user.following else { return [] }
+        guard let userFollowers = user.followers else { return [] }
+        let mutuals = Set(userFollowing).intersection(Set(userFollowers))
+        guard !mutuals.isEmpty else { return [] }
+        
+        let snapshot = try await ReviewCollection.whereField("ownerId", in: Array(mutuals)).getDocuments()
+        var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
+        for i in 0..<reviews.count {
+                let user = try await UserService.fetchUserWithUID(withUID: reviews[i].ownerId)
+                reviews[i].user = user
+        }
+        
+        return reviews
         
         
-        return []
     }
     
     static func fetchForYouReviews() async throws -> [Review]{
@@ -66,6 +77,20 @@ struct ReviewService{
         guard let userFavourited = user.favouritedReviews else { return [] }
         
         let snapshot = try await ReviewCollection.whereField("id", in: userFavourited).getDocuments()
+        var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
+        for i in 0..<reviews.count {
+                let user = try await UserService.fetchUserWithUID(withUID: reviews[i].ownerId)
+                reviews[i].user = user
+        }
+        
+        return reviews
+    }
+    
+    static func fetchBookmarkedReviews(uid: String) async throws -> [Review]{
+        let user = try await UserService.fetchUserWithUID(withUID: uid)
+        guard let userBookmarked = user.bookmarkedReviews else { return [] }
+        
+        let snapshot = try await ReviewCollection.whereField("id", in: userBookmarked).getDocuments()
         var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
         for i in 0..<reviews.count {
                 let user = try await UserService.fetchUserWithUID(withUID: reviews[i].ownerId)

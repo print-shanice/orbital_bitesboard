@@ -121,7 +121,7 @@ struct FeedCell: View {
         }
         .onAppear {
             isLiked = review.favouritedBy?.contains(user.id) ?? false
-            isBookmarked = viewModel.checkIfReviewBookmarked(reviewId: review.id)
+            isBookmarked = review.bookmarkedBy?.contains(user.id) ?? false
             likesCount = review.favouritedBy?.count ?? 0
         }
     }
