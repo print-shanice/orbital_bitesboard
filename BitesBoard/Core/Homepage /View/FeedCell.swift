@@ -35,9 +35,20 @@ struct FeedCell: View {
                     Text(review.restaurantName)
                         .font(.footnote)
                         .fontWeight(.bold)
+                    
                     Spacer()
+                    
+                    if review.dietaryTags != nil {
+                        ViewDietaryTagsView(selectedTags: review.dietaryTags ?? [])
+                            .padding(.trailing, 40)
+
+                    } else {
+                        Image(systemName: "xmark.circle")
+                            .padding(.trailing, 40)
+                            .foregroundStyle(.red)
+                    }
                 }
-                
+                .padding(.bottom, 10)
                 HStack{
                     Text(RelativeDateTimeFormatter()
                         .localizedString(for: review.timestamp.dateValue(), relativeTo: Date()))
@@ -56,6 +67,7 @@ struct FeedCell: View {
                     .resizable()
                     .clipShape(Rectangle())
                     .scaledToFill()
+                    .allowsHitTesting(false)
                     .frame(height: 250)
                     .cornerRadius(10)
                     .overlay(alignment: .topTrailing){

@@ -47,7 +47,7 @@ struct SettingsView: View {
                     
                     Divider()
                     
-                    SettingsRowView(systemImageName: "fork.knife", title: "Dietary Restrictions", subtitle: "Update your dietary restrictions", destination: AnyView(BookmarkView(user: user)))
+                    SettingsRowView(systemImageName: "fork.knife", title: "Dietary Restrictions", subtitle: "Update your dietary restrictions", destination: AnyView(DietaryRestrictionsView(user: user)))
                     
                     Divider()
                     
