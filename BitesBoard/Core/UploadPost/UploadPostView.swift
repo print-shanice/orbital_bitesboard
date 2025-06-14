@@ -25,6 +25,10 @@ struct UploadPostView: View {
                 HStack{
                     Button{
                         caption = ""
+                        restaurantName = ""
+                        selectedTags = []
+                        rating = 0.0
+                        photoItem = nil
                         viewModel.selectedImage = nil
                         viewModel.postImage = nil
                         tabIndex = 0
@@ -53,18 +57,17 @@ struct UploadPostView: View {
                             .foregroundStyle(.red)
                     }
                 }
-                .padding(.leading)
-                .padding(.trailing)
-                .padding(.horizontal)
+                .padding(.horizontal, 30)
                 .padding(.bottom, 20)
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 10) {
                     if let image = viewModel.postImage {
                         image
                             .resizable()
                             .scaledToFill()
                             .frame(width: 350, height: 350)
                             .clipped()
+                            .allowsHitTesting(false)
                     }
                     
                     InteractiveStarRatingView(rating: $rating)

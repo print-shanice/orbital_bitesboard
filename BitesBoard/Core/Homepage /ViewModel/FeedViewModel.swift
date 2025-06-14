@@ -77,4 +77,5 @@ class FeedViewModel: ObservableObject {
             try await ReviewService.unbookmarkReview(reviewId: reviewId, uid: uid)
         }
     }
+    
 }

@@ -140,4 +140,7 @@ struct ReviewService{
         try await batch.commit()
     }
 
+//    static func fetchDietaryTags(reviewId: String) async throws -> [String]  {
+//
+//    }
 }

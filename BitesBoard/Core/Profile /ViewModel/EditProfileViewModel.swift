@@ -20,6 +20,7 @@ class EditProfileViewModel: ObservableObject {
     @Published var username = ""
     @Published var bio = ""
     @Published var country = ""
+    @Published var dietaryRestrictions: [String] = []
     private var uiImage: UIImage?
     
     init(user:User){
@@ -75,6 +76,17 @@ class EditProfileViewModel: ObservableObject {
         if !data.isEmpty {
             try await Firestore.firestore().collection("users").document(user.id).updateData(data)
         }
+    }
+    
+    func updateUserDietaryRestrictions() async throws {
+        var data = [String: Any]()
         
+        if !dietaryRestrictions.isEmpty {
+            data["dietaryRestrictions"] = dietaryRestrictions
+        }
+        
+        if !data.isEmpty {
+            try await Firestore.firestore().collection("users").document(user.id).updateData(data)
+        }
     }
 }
