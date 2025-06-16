@@ -42,11 +42,7 @@ struct FeedCell: View {
                         ViewDietaryTagsView(selectedTags: review.dietaryTags ?? [])
                             .padding(.trailing, 40)
 
-                    } else {
-                        Image(systemName: "xmark.circle")
-                            .padding(.trailing, 40)
-                            .foregroundStyle(.red)
-                    }
+                    } 
                 }
                 .padding(.bottom, 10)
                 HStack{

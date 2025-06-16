@@ -1,17 +1,17 @@
 //
-//  DietaryTagsMenuView.swift
+//  CuisineMenuView.swift
 //  BitesBoard
 //
-//  Created by lai shanice on 13/6/25.
+//  Created by lai shanice on 16/6/25.
 //
 import SwiftUI
 
-
-struct DietaryTagsMenuView: View {
+struct CuisineMenuView: View {
     @State private var isExpanded = false
-    @Binding var selectedTags: [String]
+    @Binding var selectedCuisine: String?
     
-    let dietaryTags =  ["Vegetarian", "Vegan", "Gluten-free", "Halal", "Kosher", "Pescatarian", "Non-spicy", "Lactose-free", "Diary-free", "Keto", "Sugar-free", "Nut-free", "Shellfish-free", "Organic", "No MSG"]
+    let cuisines =  ["Italian", "Japanese", "Mexican", "Indian", "Chinese", "Korean", "American", "Spanish", "Thai", "Vietnamese", "Indonesian", "Malaysian", "French", "Mediterranean"]
+
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,7 +19,7 @@ struct DietaryTagsMenuView: View {
                 isExpanded.toggle()
             }) {
                 HStack {
-                    Text("Dietary Tags")
+                    Text(selectedCuisine ?? "Cuisine")
                         .font(.headline)
                         .foregroundStyle(.black)
                     Spacer()
@@ -33,18 +33,19 @@ struct DietaryTagsMenuView: View {
             .padding(.leading)
             
             if isExpanded {
-                ForEach(dietaryTags, id: \.self) { tag in
+                ForEach(cuisines, id: \.self) { cuisine in
                     Button(action: {
-                        if selectedTags.contains(tag) {
-                            selectedTags .removeAll { $0 == tag }
+                        if selectedCuisine == cuisine {
+                            selectedCuisine = nil
                         } else {
-                            selectedTags.append(tag)
+                            selectedCuisine = cuisine
                         }
+                        isExpanded = false
                     }) {
                         HStack {
-                            Text(tag)
+                            Text(cuisine)
                             Spacer()
-                            if selectedTags.contains(tag) {
+                            if selectedCuisine == cuisine {
                                 Image(systemName: "checkmark")
                                     .foregroundStyle(.red)
                             }
@@ -60,6 +61,3 @@ struct DietaryTagsMenuView: View {
         .padding()
     }
 }
-
-
-
