@@ -9,6 +9,8 @@ import Foundation
 
 class SearchViewModel: ObservableObject {
     @Published var users = [User]()
+    @Published var reviews: [Review] = []
+    
     
     init(){
         Task{
@@ -20,4 +22,11 @@ class SearchViewModel: ObservableObject {
     func fetchAllUsers() async throws {
         self.users = try await UserService.fetchAllUsers()
     }
+    
+    @MainActor
+    func fetchAllReviews() async throws {
+        self.reviews = try await ReviewService.fetchFeedReviews()
+    }
+    
+  
 }

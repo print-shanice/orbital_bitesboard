@@ -17,6 +17,8 @@ struct Review: Identifiable, Hashable, Codable {
     let caption: String
     let starRating: Double
     let timestamp: Timestamp
+    let price: Int?
+    let cuisine: String?
     
     var user: User?
     var bookmarkedBy: [String]?
@@ -30,9 +32,11 @@ struct Review: Identifiable, Hashable, Codable {
          caption: String,
          starRating: Double,
          timestamp: Timestamp,
+         price: Int? = 0,
+         cuisine: String? = "",
          user: User? = nil,
          bookmarkedBy: [String]? = nil,
-         favouritedBy: [String]? = nil,)
+         favouritedBy: [String]? = nil)
           {
         self.id = id
         self.ownerId = ownerId
@@ -42,6 +46,8 @@ struct Review: Identifiable, Hashable, Codable {
         self.caption = caption
         self.starRating = starRating
         self.timestamp = timestamp
+        self.price = price
+        self.cuisine = cuisine
         self.user = user
         self.bookmarkedBy = bookmarkedBy
         self.favouritedBy = favouritedBy

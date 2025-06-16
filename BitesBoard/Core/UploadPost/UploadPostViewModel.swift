@@ -29,13 +29,13 @@ class UploadPostViewModel: ObservableObject {
         
     }
     
-    func uploadReview(restaurantName: String, caption: String, rating: Double, dietaryTags: [String]) async throws {
+    func uploadReview(restaurantName: String, caption: String, rating: Double, dietaryTags: [String], cuisine: String, price : Int) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         guard let uiImage = uiImage else {return}
         let postRef = Firestore.firestore().collection("reviews").document()
         guard let imageURL = try await ImageUploader.uploadImage(image: uiImage) else {return}
         
-        let review = Review(id: postRef.documentID, ownerId: uid, restaurantName: restaurantName, dietaryTags: dietaryTags, foodPhoto: imageURL, caption: caption, starRating: rating, timestamp: Timestamp())
+        let review = Review(id: postRef.documentID, ownerId: uid, restaurantName: restaurantName, dietaryTags: dietaryTags, foodPhoto: imageURL, caption: caption, starRating: rating, timestamp: Timestamp(), price: price, cuisine: cuisine)
         guard let encodedReview = try? Firestore.Encoder().encode(review) else {return}
         
         try await postRef.setData(encodedReview)
