@@ -49,7 +49,7 @@ struct FeedCell: View {
                 .padding(.bottom, 10)
                 HStack{
                     HStack {
-                        Text("\(review.cuisine ?? "") :")
+                        Text("\(review.cuisine ?? "")  |")
                             .font(.footnote)
                             .foregroundStyle(.gray)
                         

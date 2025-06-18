@@ -19,28 +19,7 @@ struct EditProfileView: View {
     
     var body: some View {
         VStack{
-            //cancel and done buttons
-            HStack{
-                Button("Cancel"){
-                    dismiss()
-                }
-                .foregroundStyle(.red)
-                
-                Spacer()
-                
-                Button{
-                    Task{
-                        try await viewModel.updateUserProfile()
-                        dismiss()
-                    }
-                } label: {
-                    Text("Done")
-                }
-                
-                .foregroundStyle(.red)
-            }
-            .padding(.horizontal)
-            .padding(.bottom, 10)
+
             // header
             Text("Edit Your Profile")
                 .font(.title2)
@@ -93,6 +72,20 @@ struct EditProfileView: View {
             
         }
         .padding(.bottom, 300)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button{
+                    Task{
+                        try await viewModel.updateUserProfile()
+                        dismiss()
+                    }
+                } label: {
+                    Text("Done")
+                }
+                
+                .foregroundStyle(.red)
+            }
+        }
     }
 }
 

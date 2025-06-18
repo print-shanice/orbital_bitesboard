@@ -29,7 +29,7 @@ struct SearchView: View {
         }
     }
     
-    //based on search input, check caption and restaraunt name
+    //based on search input, check caption and restaraunt
     var filteredReviews: [Review] {
         if searchText.isEmpty {
             return viewModel.reviews
