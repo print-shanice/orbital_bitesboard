@@ -22,12 +22,15 @@ struct FeedCell: View {
         //pfp, username and restaraunt
             VStack(spacing: 2) {
                 HStack{
-                    if let user = review.user {
-                        CircularProfileImageView(user: user, size: .small)
+                    if let owner = review.user {
+                        CircularProfileImageView(user: owner, size: .small)
                         
-                        Text(review.user?.username ?? "")
-                            .font(.footnote)
-                            .fontWeight(.bold)
+                        NavigationLink(destination: ProfileView(currUser: user, targetUser: owner)) {
+                            Text(owner.username ?? "")
+                                .font(.footnote)
+                                .foregroundStyle(.black)
+                                .fontWeight(.bold)
+                        }
                     }
                     
                     Text("at")
@@ -38,14 +41,25 @@ struct FeedCell: View {
                     
                     Spacer()
                     
-                    if review.dietaryTags != nil {
-                        ViewDietaryTagsView(selectedTags: review.dietaryTags ?? [])
-                            .padding(.trailing, 40)
+                    ViewDietaryTagsView(selectedTags: review.dietaryTags ?? [])
+                        .padding(.trailing, 40)
 
-                    } 
+                    
                 }
                 .padding(.bottom, 10)
                 HStack{
+                    HStack {
+                        Text("\(review.cuisine ?? "") :")
+                            .font(.footnote)
+                            .foregroundStyle(.gray)
+                        
+                        Text("$\(review.price)")
+                            .font(.footnote)
+                            .foregroundStyle(.gray)
+                        
+                        Spacer()
+                    }
+                    
                     Text(RelativeDateTimeFormatter()
                         .localizedString(for: review.timestamp.dateValue(), relativeTo: Date()))
                     .font(.footnote)
@@ -53,6 +67,7 @@ struct FeedCell: View {
                     
                     Spacer()
                 }
+                .padding(.trailing)
             }
             .padding(.leading)
             
@@ -93,6 +108,7 @@ struct FeedCell: View {
             .padding(.horizontal)
         //caption and likes
             VStack{
+                
                 HStack {
                     Text(review.caption)
                         .font(.subheadline)

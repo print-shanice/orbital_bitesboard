@@ -20,17 +20,19 @@ struct FeedView: View {
     }
     
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 32) {
-                ForEach(viewModel.reviews){ post in
-                    FeedCell(user: user, review: post, viewModel: viewModel)
+        NavigationStack{
+            ScrollView {
+                LazyVStack(spacing: 32) {
+                    ForEach(viewModel.reviews){ post in
+                        FeedCell(user: user, review: post, viewModel: viewModel)
+                    }
                 }
             }
-        }
-        .padding(.vertical)
-        .onChange(of: column) {
-            Task {
-                try? await viewModel.fetchPosts(for: column)
+            .padding(.vertical)
+            .onChange(of: column) {
+                Task {
+                    try? await viewModel.fetchPosts(for: column)
+                }
             }
         }
     }

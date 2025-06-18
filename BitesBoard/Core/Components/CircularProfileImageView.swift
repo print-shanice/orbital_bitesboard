@@ -18,6 +18,7 @@ struct CircularProfileImageView: View {
                 .scaledToFill()
                 .frame(width: size.dimension, height: size.dimension)
                 .clipShape(Circle())
+                .allowsHitTesting(false)
         } else {
             Image(systemName: "person.circle.fill")
                 .resizable()

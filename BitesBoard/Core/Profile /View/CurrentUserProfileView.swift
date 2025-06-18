@@ -33,13 +33,23 @@ struct CurrentUserProfileView: View {
                     
                     
                     // followers, following and username
-                    HStack(spacing: 20){
+                    HStack(spacing: 30){
                         NavigationLink(destination: FollowersView(user: user)) {
                             UserStatView(value: user.followers?.count ?? 0, title: "Followers")
                         }
-                        Text("@\(user.username ?? "NA")")
-                            .font(.footnote)
-                            .fontWeight(.bold)
+                        
+                        VStack(spacing: 4) {
+                            Text("@\(user.username ?? "NA")")
+                                .font(.footnote)
+                                .fontWeight(.bold)
+
+                            HStack(spacing: 4) {
+                                Image(systemName: "mappin.and.ellipse")
+                                    .foregroundColor(.gray)
+                                Text(user.country ?? "earth")
+                                    .font(.caption)
+                            }
+                        }
                         
                         NavigationLink(destination: FollowingView(user: user)) {
                             UserStatView(value: user.following?.count ?? 0, title: "Following")

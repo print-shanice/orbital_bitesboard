@@ -11,7 +11,7 @@ struct DietaryTagsMenuView: View {
     @State private var isExpanded = false
     @Binding var selectedTags: [String]
     
-    let dietaryTags =  ["Vegetarian", "Vegan", "Gluten-free", "Halal", "Kosher", "Pescatarian", "Non-spicy", "Lactose-free", "Diary-free", "Keto", "Sugar-free", "Nut-free", "Shellfish-free", "Organic", "No MSG"]
+    let dietaryTags =  ["Vegetarian", "Vegan", "Gluten-free", "Halal", "Kosher", "Pescatarian", "Non-spicy", "Lactose-free", "Diary-free", "Keto", "Sugar-free", "Nut-free", "Shellfish-free", "Organic", "No MSG", "None"]
     
     var body: some View {
         VStack(alignment: .leading) {

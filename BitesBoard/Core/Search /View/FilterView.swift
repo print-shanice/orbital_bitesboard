@@ -60,7 +60,7 @@ struct FilterView: View {
 
                         // interactive rating glider
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("Rating")
+                            Text("Minimum Rating")
                                 .font(.headline)
                                 .padding(.horizontal)
 
