@@ -68,11 +68,17 @@ struct CurrentUserProfileView: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
-                            ForEach(viewModel.reviews) { review in
-                                KFImage(URL(string: review.foodPhoto))
-                                    .resizable()
-                                    .frame(width:200, height:200)
-                                    .cornerRadius(10)
+                            ForEach(viewModel.favouriteReviews) { review in
+                                NavigationLink(destination: FeedCell(user: user, review: review, viewModel: FeedViewModel(user: user))){
+                                    ZStack(alignment: .bottomLeading) {
+                                        KFImage(URL(string: review.foodPhoto))
+                                            .resizable()
+                                            .frame(width:200, height:200)
+                                            .cornerRadius(10)
+                                        
+                                        StarRatingView(rating: review.starRating)
+                                    }
+                                }
                             }
                         }
                         .padding(.horizontal)
@@ -88,12 +94,17 @@ struct CurrentUserProfileView: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
-                            ForEach(viewModel.reviews) { review in
-                                KFImage(URL(string: review.foodPhoto))
-                                    .resizable()
-                                    .frame(width:200, height:200)
-                                    .cornerRadius(10)
-                                
+                            ForEach(viewModel.recentReviews) { review in
+                                NavigationLink(destination: FeedCell(user: user, review: review, viewModel: FeedViewModel(user: user))){
+                                    ZStack(alignment: .bottomLeading) {
+                                        KFImage(URL(string: review.foodPhoto))
+                                            .resizable()
+                                            .frame(width:200, height:200)
+                                            .cornerRadius(10)
+                                        
+                                        StarRatingView(rating: review.starRating)
+                                    }
+                                }
                             }
                         }
                         .padding(.horizontal)

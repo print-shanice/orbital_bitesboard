@@ -12,7 +12,7 @@ struct ReviewService{
     private static let ReviewCollection = Firestore.firestore().collection("reviews")
     
     static func fetchFeedReviews() async throws ->  [Review] {
-        let snapshot = try await ReviewCollection.getDocuments()
+        let snapshot = try await ReviewCollection.order(by: "timestamp", descending: true).getDocuments()
         var reviews = try  snapshot.documents.compactMap({document in
             let review = try document.data(as: Review.self)
             return review
@@ -27,19 +27,27 @@ struct ReviewService{
         return reviews
     }
     
-    static func fetchUserReviews(uid: String ) async throws ->  [Review] {
-        let snapshot = try await  ReviewCollection.whereField( "ownerId", isEqualTo: uid).getDocuments()
-        return try snapshot.documents.compactMap({document in
-            let review = try document.data(as: Review.self)
-            return review
-        })
+    static func fetchUserReviews(uid: String) async throws -> [Review] {
+        let user = try await UserService.fetchUserWithUID(withUID: uid)
+        let snapshot = try await ReviewCollection
+            .whereField("ownerId", isEqualTo: uid)
+            .order(by: "timestamp", descending: true)
+            .getDocuments()
+        
+        var reviews = try snapshot.documents.compactMap { try $0.data(as: Review.self) }
+        for i in 0..<reviews.count {
+            reviews[i].user = user
+        }
+        
+        return reviews
     }
+
     
     static func fetchFollowingReviews(uid: String) async throws -> [Review]{
         let user = try await UserService.fetchUserWithUID(withUID: uid)
         guard let userFollowing = user.following else { return [] }
         
-        let snapshot = try await ReviewCollection.whereField("ownerId", in: userFollowing).getDocuments()
+        let snapshot = try await ReviewCollection.whereField("ownerId", in: userFollowing).order(by: "timestamp", descending: true).getDocuments()
         var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
         for i in 0..<reviews.count {
                 let user = try await UserService.fetchUserWithUID(withUID: reviews[i].ownerId)
@@ -56,7 +64,7 @@ struct ReviewService{
         let mutuals = Set(userFollowing).intersection(Set(userFollowers))
         guard !mutuals.isEmpty else { return [] }
         
-        let snapshot = try await ReviewCollection.whereField("ownerId", in: Array(mutuals)).getDocuments()
+        let snapshot = try await ReviewCollection.whereField("ownerId", in: Array(mutuals)).order(by: "timestamp", descending: true).getDocuments()
         var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
         for i in 0..<reviews.count {
                 let user = try await UserService.fetchUserWithUID(withUID: reviews[i].ownerId)
@@ -78,7 +86,7 @@ struct ReviewService{
             return try await fetchFeedReviews()
         }
         
-        let snapshot = try await ReviewCollection.whereField("dietaryTags" , arrayContainsAny: userDietaryRestrictions).getDocuments()
+        let snapshot = try await ReviewCollection.whereField("dietaryTags" , arrayContainsAny: userDietaryRestrictions).order(by: "timestamp", descending: true).getDocuments()
         var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
         
         for i in 0..<reviews.count {
@@ -93,7 +101,7 @@ struct ReviewService{
         let user = try await UserService.fetchUserWithUID(withUID: uid)
         guard let userFavourited = user.favouritedReviews else { return [] }
         
-        let snapshot = try await ReviewCollection.whereField("id", in: userFavourited).getDocuments()
+        let snapshot = try await ReviewCollection.whereField("id", in: userFavourited).order(by: "timestamp", descending: true).getDocuments()
         var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
         for i in 0..<reviews.count {
                 let user = try await UserService.fetchUserWithUID(withUID: reviews[i].ownerId)
@@ -107,7 +115,7 @@ struct ReviewService{
         let user = try await UserService.fetchUserWithUID(withUID: uid)
         guard let userBookmarked = user.bookmarkedReviews else { return [] }
         
-        let snapshot = try await ReviewCollection.whereField("id", in: userBookmarked).getDocuments()
+        let snapshot = try await ReviewCollection.whereField("id", in: userBookmarked).order(by: "timestamp", descending: true).getDocuments()
         var reviews = try snapshot.documents.compactMap({try $0.data(as: Review.self)})
         for i in 0..<reviews.count {
                 let user = try await UserService.fetchUserWithUID(withUID: reviews[i].ownerId)
@@ -210,6 +218,21 @@ struct ReviewService{
         
         return reviews
     }
+    
+    static func fetchUserFavourites(uid: String) async throws ->  [Review] {
+        let user = try await UserService.fetchUserWithUID(withUID: uid)
+        var query = ReviewCollection.whereField( "ownerId", isEqualTo: uid)
+        query = query.order(by: "starRating", descending: true)
+        let snapshot = try await query.limit(to: 4).getDocuments()
+        
+        var reviews = try snapshot.documents.compactMap { try $0.data(as: Review.self) }
+        for i in 0..<reviews.count {
+            reviews[i].user = user
+        }
+        
+        return reviews
+    }
+    
 
     
 }
