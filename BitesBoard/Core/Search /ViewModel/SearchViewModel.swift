@@ -15,6 +15,7 @@ class SearchViewModel: ObservableObject {
     init(){
         Task{
             try await fetchAllUsers()
+            try await fetchAllReviews()
         }
     }
     
@@ -28,5 +29,10 @@ class SearchViewModel: ObservableObject {
         self.reviews = try await ReviewService.fetchFeedReviews()
     }
     
-  
+    @MainActor
+    func fetchFilteredReviews(filters: ReviewFilters) async throws{
+        let filteredReviews = try await ReviewService.fetchFeedReviewsWithFilter(filters: filters)
+        self.reviews = filteredReviews
+
+    }
 }

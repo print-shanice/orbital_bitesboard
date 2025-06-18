@@ -15,7 +15,6 @@ struct ReviewFilters: Identifiable, Codable, Hashable {
     var selectedCuisineCategories: [String] = []
     var selectedDietaryRestrictions: [String] = []
     var sortBy: SortOption = .dateDesc
-    var distance: Double?
     enum SortOption: String, CaseIterable, Codable, Hashable {
         case dateDesc = "Newest"
         case ratingAsc = "Rating ↑"
@@ -25,6 +24,6 @@ struct ReviewFilters: Identifiable, Codable, Hashable {
 
   
     static var `default`: ReviewFilters {
-        ReviewFilters(minRating: 1, maxRating: 5, maxBudget: 50, distance: nil)
+        ReviewFilters(minRating: 0.5, maxRating: 5, maxBudget: 50)
     }
 }

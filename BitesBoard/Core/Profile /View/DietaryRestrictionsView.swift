@@ -10,7 +10,7 @@ struct DietaryRestrictionsView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var viewModel:  EditProfileViewModel
     
-    let dietaryTags = ["Vegetarian", "Vegan", "Gluten-free", "Halal", "Kosher", "Pescatarian", "Non-spicy", "Lactose-free", "Diary-free", "Keto", "Sugar-free", "Nut-free", "Shellfish-free", "Organic", "No MSG"]
+    let dietaryTags = ["Vegetarian", "Vegan", "Gluten-free", "Halal", "Kosher", "Pescatarian", "Non-spicy", "Lactose-free", "Diary-free", "Keto", "Sugar-free", "Nut-free", "Shellfish-free", "Organic", "No MSG", "None"]
     
     init(user: User){
         self._viewModel = StateObject(wrappedValue: EditProfileViewModel(user: user))

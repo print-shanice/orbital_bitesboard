@@ -20,6 +20,8 @@ struct UploadPostView: View {
     @State private var rating: Double = 0.0
     @State private var priceInput: String = ""
     @State private var isUploading = false
+    @State private var showAlert = false
+
 
     
 
@@ -51,6 +53,12 @@ struct UploadPostView: View {
                     Spacer()
                     
                     Button {
+                        guard !restaurantName.isEmpty,
+                              !selectedTags.isEmpty,
+                              !priceInput.isEmpty,
+                              selectedCuisine != nil else {
+                            showAlert = true
+                            return}
                         isUploading = true
                         Task {
                             do {
@@ -71,7 +79,7 @@ struct UploadPostView: View {
                                 viewModel.selectedImage = nil
                                 viewModel.postImage = nil
                                 tabIndex = 0
-                            } 
+                            }
                             isUploading = false
                         }
                     } label: {
@@ -84,6 +92,10 @@ struct UploadPostView: View {
                         }
                     }
                     .disabled(isUploading)
+                    .alert("Please fill in all required fields: Restaurant, Price, Cuisine, and Dietary tags.", isPresented: $showAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
+
 
                 }
                 .padding(.horizontal, 30)

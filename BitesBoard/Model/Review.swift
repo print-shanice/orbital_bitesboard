@@ -17,7 +17,7 @@ struct Review: Identifiable, Hashable, Codable {
     let caption: String
     let starRating: Double
     let timestamp: Timestamp
-    let price: Int?
+    let price: Int
     let cuisine: String?
     
     var user: User?
@@ -32,7 +32,7 @@ struct Review: Identifiable, Hashable, Codable {
          caption: String,
          starRating: Double,
          timestamp: Timestamp,
-         price: Int? = 0,
+         price: Int,
          cuisine: String? = "",
          user: User? = nil,
          bookmarkedBy: [String]? = nil,
@@ -56,10 +56,10 @@ struct Review: Identifiable, Hashable, Codable {
 
 extension Review {
     static var MOCK_REVIEWS: [Review] = [
-        Review(ownerId: UUID().uuidString, restaurantName: "Ikseoyang", foodPhoto: "food", caption: "zhen zhen would love this", starRating: 4.5, timestamp: Timestamp(), user: User.MOCK_USERS[0]),
-        Review(ownerId: UUID().uuidString, restaurantName: "Regh", foodPhoto: "food2", caption: "zhen zhen would love this", starRating: 2.5, timestamp: Timestamp(), user: User.MOCK_USERS[1]),
-        Review(ownerId: UUID().uuidString, restaurantName: "Ikang", foodPhoto: "food3", caption: "zhen zhen would love this", starRating: 4, timestamp: Timestamp(), user: User.MOCK_USERS[2]),
-        Review(ownerId: UUID().uuidString, restaurantName: "Dig", foodPhoto: "food4", caption: "zhen zhen would love this", starRating: 3.5, timestamp: Timestamp(), user: User.MOCK_USERS[3]),
-        Review(ownerId: UUID().uuidString, restaurantName: "Dumb bar", foodPhoto: "food5", caption: "zhen zhen would love this", starRating: 3.5, timestamp: Timestamp(), user: User.MOCK_USERS[4])
+        Review(ownerId: UUID().uuidString, restaurantName: "Ikseoyang", dietaryTags: ["None"], foodPhoto: "food", caption: "zhen zhen would love this", starRating: 4.5, timestamp: Timestamp(), price: 15, cuisine: "Korean", user: User.MOCK_USERS[0]),
+        Review(ownerId: UUID().uuidString, restaurantName: "Regh", dietaryTags: ["None"], foodPhoto: "food2", caption: "zhen zhen would love this", starRating: 2.5, timestamp: Timestamp(), price: 15,  user: User.MOCK_USERS[1]),
+        Review(ownerId: UUID().uuidString, restaurantName: "Ikang", dietaryTags: ["None"], foodPhoto: "food3", caption: "zhen zhen would love this", starRating: 4, timestamp: Timestamp(), price: 15,  user: User.MOCK_USERS[2]),
+        Review(ownerId: UUID().uuidString, restaurantName: "Dig", dietaryTags: ["None"],foodPhoto: "food4", caption: "zhen zhen would love this", starRating: 3.5, timestamp: Timestamp(), price: 15,  user: User.MOCK_USERS[3]),
+        Review(ownerId: UUID().uuidString, restaurantName: "Dumb bar", dietaryTags: ["None"], foodPhoto: "food5", caption: "zhen zhen would love this", starRating: 3.5, timestamp: Timestamp(), price: 15,  user: User.MOCK_USERS[4])
     ]
 }

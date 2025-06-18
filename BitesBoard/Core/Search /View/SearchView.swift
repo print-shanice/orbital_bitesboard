@@ -18,6 +18,7 @@ struct SearchView: View {
         case reviews = "Reviews"
     }
     
+    // based on search input, check username
     var filteredUsers: [User] {
         if searchText.isEmpty {
             return viewModel.users
@@ -28,7 +29,18 @@ struct SearchView: View {
         }
     }
     
-    
+    //based on search input, check caption and restaraunt name
+    var filteredReviews: [Review] {
+        if searchText.isEmpty {
+            return viewModel.reviews
+        } else {
+            return viewModel.reviews.filter { review in
+                review.caption.localizedCaseInsensitiveContains(searchText) ||
+                review.restaurantName.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+    }
+
     
     @State private var selectedTab: SearchTab = .users
 
@@ -64,8 +76,10 @@ struct SearchView: View {
                                 }
                             }
                         } else {
-                            
-                            
+                            ForEach(filteredReviews) { review in
+                                FeedCell(user: user, review: review, viewModel: FeedViewModel(user: user))
+                                
+                            }
                         }
                     }
                     .padding(.top, 8)
@@ -87,6 +101,13 @@ struct SearchView: View {
                             Image(systemName: "line.3.horizontal.decrease.circle")
                                 .foregroundStyle(.red)
                         }
+                    }
+                }
+            }
+            .onChange(of: filters) { _, newFilters in
+                if selectedTab == .reviews {
+                    Task {
+                        try await viewModel.fetchFilteredReviews(filters: newFilters)
                     }
                 }
             }
