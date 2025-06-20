@@ -21,7 +21,7 @@ struct FilterView: View {
     @State private var showCuisine: Bool = false
 
 
-    let cuisineCategories = ["Italian", "Japanese", "Mexican", "Indian", "Chinese", "Korean", "Western"]
+    let cuisineCategories = ["Local", "Italian", "Japanese", "Mexican", "Indian", "Chinese", "Korean", "American", "Spanish", "Thai", "Vietnamese", "Indonesian", "Malaysian", "French", "Mediterranean"]
     let dietaryRestrictions = ["Vegetarian", "Vegan", "Gluten-free", "Halal", "Kosher", "Pescatarian", "Non-spicy", "Lactose-free", "Diary-free", "Keto", "Sugar-free", "Nut-free", "Shellfish-free", "Organic", "No MSG"]
     
 

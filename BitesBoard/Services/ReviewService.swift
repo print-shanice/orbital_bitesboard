@@ -27,6 +27,13 @@ struct ReviewService{
         return reviews
     }
     
+    static func fetchReview(reviewId: String) async throws -> Review {
+        let snapshot = try await ReviewCollection.whereField("id", isEqualTo: reviewId).getDocuments()
+        
+        guard let document = snapshot.documents.first else {throw NSError(domain: "", code: 0, userInfo: nil)}
+        return try document.data(as: Review.self)
+    }
+    
     static func fetchUserReviews(uid: String) async throws -> [Review] {
         let user = try await UserService.fetchUserWithUID(withUID: uid)
         let snapshot = try await ReviewCollection

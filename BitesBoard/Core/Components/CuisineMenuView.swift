@@ -10,7 +10,7 @@ struct CuisineMenuView: View {
     @State private var isExpanded = false
     @Binding var selectedCuisine: String?
     
-    let cuisines =  ["Italian", "Japanese", "Mexican", "Indian", "Chinese", "Korean", "American", "Spanish", "Thai", "Vietnamese", "Indonesian", "Malaysian", "French", "Mediterranean"]
+    let cuisines =  ["Local", "Italian", "Japanese", "Mexican", "Indian", "Chinese", "Korean", "American", "Spanish", "Thai", "Vietnamese", "Indonesian", "Malaysian", "French", "Mediterranean"]
 
     
     var body: some View {

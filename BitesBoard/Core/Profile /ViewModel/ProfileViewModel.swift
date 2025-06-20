@@ -30,16 +30,19 @@ class ProfileViewModel: ObservableObject {
         }
     }
     
-    func toggleFollowing() async throws {
+    func toggleFollowing() async throws -> Bool {
         var followingData = [String: Any]()
         var followedData = [String: Any]()
+        let follow: Bool
         
         if isFollowing {
             followingData["following"] = FieldValue.arrayRemove([followedUser.id])
-            followedData["followers"] = FieldValue.arrayRemove([followingUser.id])
+            followedData["followers"] = FieldValue.arrayRemove([followingUser.id]).self
+            follow = false
         } else {
             followingData["following"] = FieldValue.arrayUnion([followedUser.id])
             followedData["followers"] = FieldValue.arrayUnion([followingUser.id])
+            follow = true
         }
         
         if !followingData.isEmpty && !followedData.isEmpty{
@@ -47,5 +50,6 @@ class ProfileViewModel: ObservableObject {
             try await Firestore.firestore().collection("users").document(followedUser.id).updateData(followedData)
         }
         isFollowing.toggle()
+        return follow
     }
 }

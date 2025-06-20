@@ -48,7 +48,10 @@ struct ProfileView: View {
                         } else {
                             Button(action: {
                                 Task {
-                                   try await profileViewModel.toggleFollowing()
+                                   let followingStatus = try await profileViewModel.toggleFollowing()
+                                    if followingStatus {
+                                        try await NotificationService.uploadNotification(uid: currUser.id, toUserId: targetUser.id, type: "follow")
+                                    }
                                 }
                             }) {
                                 Text(profileViewModel.isFollowing ? "Unfollow" :"Follow")

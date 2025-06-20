@@ -118,13 +118,16 @@ struct FeedCell: View {
                 
                 HStack {
                     Button(action: {
-                        print("hi")
                         isLiked.toggle()
                         likesCount += isLiked ? 1 : -1
                         
                         Task {
                             if isLiked {
                                 try await viewModel.likeReview(reviewId: review.id)
+                                
+                                if review.ownerId != user.id {
+                                    try await NotificationService.uploadNotification(uid: user.id, toUserId: review.ownerId, type: "like", reviewId: review.id)
+                                }
                             } else {
                                 try await viewModel.unlikeReview(reviewId: review.id)
                             }
