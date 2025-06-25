@@ -82,21 +82,23 @@ class AuthService {
         self.userSession = authResult.user
     }
         
-        func signOut(){
+    func signOut(){
             try? Auth.auth().signOut()
             self.userSession = nil
             self.currentUser = nil
-        }
+    }
         
-        func deleteUser(){
+    //for later use, when doing admin moderation
+    func deleteUser(){
             
-        }
+    }
         
     @MainActor
-        func loadUserData() async throws {
-            self.userSession = Auth.auth().currentUser
-            guard let currentUID = userSession?.uid else { return }
-            self.currentUser = try await UserService.fetchUserWithUID(withUID: currentUID)
+    func loadUserData() async throws {
+        self.userSession = Auth.auth().currentUser
+        guard let currentUID = userSession?.uid else { return }
+        self.currentUser = try await UserService.fetchUserWithUID(withUID: currentUID)
            
-        }
+    }
+    
 }

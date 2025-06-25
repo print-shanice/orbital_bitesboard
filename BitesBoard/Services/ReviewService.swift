@@ -240,6 +240,11 @@ struct ReviewService{
         return reviews
     }
     
+    static func deleteReview(reviewId: String) async throws {
+        let snapshot = try await ReviewCollection.whereField("id", isEqualTo: reviewId).getDocuments()
+        guard let document = snapshot.documents.first else { throw NSError(domain: "", code: 404, userInfo: [NSLocalizedDescriptionKey: "Review not found"])}
+        try await document.reference.delete()
+    }
 
     
 }

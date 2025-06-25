@@ -20,4 +20,6 @@ class LogInViewModel: ObservableObject {
     func signInWithGoogle () async throws {
         try await AuthService.shared.signInWithGoogle()
     }
+    
+
 }

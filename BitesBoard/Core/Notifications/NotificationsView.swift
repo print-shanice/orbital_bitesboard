@@ -92,7 +92,6 @@ struct NotificationsRowView: View {
             fromUser = try? await UserService.fetchUserWithUID(withUID: notification.fromUserId)
             
             if let reviewId = notification.reviewId, !reviewId.isEmpty {
-                print("Trying to fetch review with ID: \(reviewId)")
                 review = try? await ReviewService.fetchReview(reviewId: reviewId)
             }
         }

@@ -26,43 +26,42 @@ struct ProfileView: View {
                 //header
                 VStack{
                     //pfp
-                    HStack {
-                        Spacer()
+                    ZStack {
                         CircularProfileImageView(user: targetUser, size: .large)
-                        Spacer()
-                    }
-                    .padding(.vertical, 10)
-                    
-                    // username and location
-                    HStack {
-                        if targetUser.id == currUser.id {
-                            NavigationLink(destination: FollowersView(user: currUser)) {
-                                Text("Followers")
-                                    .font(.subheadline)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color.gray.opacity(0.5))
-                                    .cornerRadius(8)
-
-                            }
-                        } else {
-                            Button(action: {
-                                Task {
-                                   let followingStatus = try await profileViewModel.toggleFollowing()
-                                    if followingStatus {
-                                        try await NotificationService.uploadNotification(uid: currUser.id, toUserId: targetUser.id, type: "follow")
+                        HStack {
+                            if !targetUser.isCurrentUser {
+                                Button(action: {
+                                    Task {
+                                        let followingStatus = try await profileViewModel.toggleFollowing()
+                                        if followingStatus {
+                                            try await NotificationService.uploadNotification(uid: currUser.id, toUserId: targetUser.id, type: "follow")
+                                        }
                                     }
+                                }) {
+                                    Text(profileViewModel.isFollowing ? "Unfollow" : "Follow")
+                                        .font(.footnote)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .background(Color.gray.opacity(0.1))
+                                        .cornerRadius(8)
+                                        .foregroundStyle(.red)
                                 }
-                            }) {
-                                Text(profileViewModel.isFollowing ? "Unfollow" :"Follow")
-                                    .font(.subheadline)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color.gray.opacity(0.1))
-                                    .cornerRadius(8)
-                                    .foregroundStyle(.red)
                             }
                         }
+                        .padding(.leading, 180)
+                        .padding(.horizontal)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+
+                    // username and location
+                    HStack {
+                        
+                        NavigationLink(destination: FollowersView(user: targetUser)) {
+                            UserStatView(value: targetUser.followers?.count ?? 0, title: "Followers")
+                        }
+                        
+                            
                         Spacer()
 
                         VStack(spacing: 4) {
@@ -81,23 +80,13 @@ struct ProfileView: View {
                         
                         if targetUser.isCurrentUser {
                             NavigationLink(destination: FollowingView(user: currUser)) {
-                                Text("Following")
-                                    .font(.subheadline)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color.gray.opacity(0.5))
-                                    .cornerRadius(8)
+                                UserStatView(value: targetUser.following?.count ?? 0, title: "Following")
                             }
                         } else {
-                            Button(action: {}) {
-                                Text("Following")
-                                    .font(.subheadline)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color.gray.opacity(0.1))
-                                    .cornerRadius(8)
-                                    .foregroundStyle(.red)
+                            NavigationLink(destination: FollowingView(user: targetUser)) {
+                                UserStatView(value: targetUser.following?.count ?? 0, title: "Following")
                             }
+                        }
                         }
                     }
                     .padding(.horizontal)
@@ -158,7 +147,6 @@ struct ProfileView: View {
                     }
                 }
             }
-        }
 }
 
 
