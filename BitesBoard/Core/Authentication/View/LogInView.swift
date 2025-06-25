@@ -13,6 +13,10 @@ struct LogInView: View {
     @State private var errorMessage: String?
     @State private var showAlert = false
     @State private var isLoading = false
+    @State private var showForgotPassword = false
+    @State private var resetEmail = ""
+    @State private var showReset = false
+
 
     var body: some View {
         VStack(spacing: 30) {
@@ -92,16 +96,8 @@ struct LogInView: View {
                     .padding(.top)
             }
 
-            // forgot password + sign up here
+            // sign up here
             VStack(spacing: 4) {
-                Button(action: {
-                    // forgot passsword
-                }) {
-                    Text("Forgot Password?")
-                        .font(.footnote)
-                        .foregroundColor(.blue)
-                }
-                
                 HStack(spacing: 4) {
                     Text("Don’t have an account?")
                         .font(.footnote)

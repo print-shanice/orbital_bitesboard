@@ -39,7 +39,7 @@ struct SettingsView: View {
                     
                     Divider()
                     
-                    SettingsRowView(systemImageName: "mappin.circle", title: "Saved locations", subtitle: "Edit your saved locations", destination: AnyView(BookmarkView(user: user)))
+                    SettingsRowView(systemImageName: "trash", title: "Delete posts", subtitle: "Delete your past posts", destination: AnyView(DeleteReviewsView(user: user)))
                     
                     Divider()
                     

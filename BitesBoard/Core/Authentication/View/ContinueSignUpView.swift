@@ -103,9 +103,7 @@ struct ContinueSignUpView: View {
             Spacer()
                 .padding(.top)
         }
-        .navigationDestination(isPresented: $shouldNavigate) {
-            VerifyEmailView()
-        }
+
         
         //popup for failed sign up
         .alert("Sign Up Failed", isPresented: $showAlert, actions: {
