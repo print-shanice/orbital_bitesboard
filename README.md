@@ -24,7 +24,7 @@ BitesBoard is an iOS mobile application designed to help users find personalised
 1. Go to the **App Store** on your MacBook.
 2. Search for **Xcode** and download it.
 3. Open Xcode and ensure you have **iOS 18.4 platform support** installed.  
-   - If not, Xcode will prompt you to install the necessary tools and simulators.
+   - If not, go to Settings -> Components -> Get for iOS 18.4 
 
 
 ### Step 2: Clone the Repository
