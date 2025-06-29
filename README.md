@@ -10,14 +10,7 @@ BitesBoard is an iOS mobile application designed to help users find personalised
 ### Prerequisites
 - **MacBook Required:**  
   Xcode is only available for macOS. You will not be able to deploy or run the app on Windows or other operating systems.
-
-- **Firebase Access:**  
-  Please contact us on Telegram with your Google email address so we can grant you access to our Firebase project:  
-  - Shanice: [@shaball](https://t.me/shaball)  
-  - Kiahna: [@kiahna](https://t.me/kiahna)  
   
-  Alternatively, you can set up and configure your own Firebase project if you prefer.
-
 ---
 
 ### Step 1: Install Xcode
@@ -28,7 +21,7 @@ BitesBoard is an iOS mobile application designed to help users find personalised
 
 
 ### Step 2: Clone the Repository
-1. Once you have been granted Firebase access, clone the project using the following command in your terminal:
+1. Clone the project using the following command in your terminal:
    ```bash
    git clone https://github.com/print-shanice/orbital_bitesboard.git
    ```
@@ -43,16 +36,9 @@ BitesBoard is an iOS mobile application designed to help users find personalised
 1. Launch **Xcode**.
 2. Select **File > Open** and choose the `.xcodeproj` or file inside the `BitesBoard` folder.
 3. Allow Xcode to finish indexing and resolve any Swift Package Manager dependencies if prompted.
+4. Download the GoogleService-Info.plist file from the repository. Drag and drop the file from finder into the correct directory in Xcode. 
 
-
-### Step 4: Configure Firebase
-> _Skip this step if you have been added to our Firebase project._
-
-If you wish to use your own Firebase project, you may refer to the documentation here to help you [Firebase](https://firebase.google.com/docs/ios/setup)
-
-
-
-### Step 5: Run the App
+### Step 4: Run the App
 1. In Xcode, select a simulator or your connected iOS device from the toolbar.
 2. Click the **Run** button or press `Cmd + R` to build and run the app.
 3. You should now see BitesBoard launch on your simulator or device.
