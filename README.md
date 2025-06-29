@@ -46,4 +46,4 @@ BitesBoard is an iOS mobile application designed to help users find personalised
 ## Troubleshooting 
 If you encounter any trouble during the installation process, do not hesitate to contact us. Any feedback will be well appreciated as well. 
 -  [Contact shanice](https://t.me/shaball)
--   [Contact kiahna](https://t.me/kiahna)
+-  [Contact kiahna](https://t.me/kiahna)
