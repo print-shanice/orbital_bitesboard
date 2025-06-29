@@ -1,5 +1,5 @@
 # Bitesboard
-![App Icon](https://github.com/print-shanice/orbital_bitesboard/blob/main/BitesBoard/Assets.xcassets/AppIcon.appiconset/Icon_Art%20(Edit%20Me)-2.png)
+![App Icon](https://github.com/print-shanice/orbital_bitesboard/blob/main/BitesBoard/BitesBoard/Assets.xcassets/AppIcon.appiconset/Icon_Art%20(Edit%20Me)-2.png)
 
 
 ## About 
