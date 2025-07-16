@@ -72,6 +72,10 @@ struct SignUpView : View {
             //google sign up
             VStack(spacing: 12) {
                 Button(action: {
+                    Task{
+                        try await AuthService.shared.signInWithGoogle()
+                    }
+                    
                 }) {
                     HStack {
                         Image("google")

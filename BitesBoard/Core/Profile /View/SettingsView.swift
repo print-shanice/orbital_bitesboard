@@ -43,10 +43,6 @@ struct SettingsView: View {
                     
                     Divider()
                     
-                    SettingsRowView(systemImageName: "lock", title: "Privacy", subtitle: "Edit your privacy settings", destination: AnyView(BookmarkView(user: user)))
-                    
-                    Divider()
-                    
                     SettingsRowView(systemImageName: "fork.knife", title: "Dietary Restrictions", subtitle: "Update your dietary restrictions", destination: AnyView(DietaryRestrictionsView(user: user)))
                     
                     Divider()
@@ -56,10 +52,6 @@ struct SettingsView: View {
                     Divider()
                     
                     SettingsRowView(systemImageName: "bell", title: "Notifications", subtitle: "Control your notification settings", destination: AnyView(BookmarkView(user: user)))
-                    
-                    Divider()
-                    
-                    SettingsRowView(systemImageName: "envelope", title: "Verify your Account", subtitle: "Verify your email address", destination: AnyView(BookmarkView(user: user)))
                     
                     Divider()
                     

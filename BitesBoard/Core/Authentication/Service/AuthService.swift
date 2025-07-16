@@ -62,25 +62,47 @@ class AuthService {
         guard let clientID = FirebaseApp.app()?.options.clientID else {
             throw URLError(.badURL)
         }
+        
+      
+        
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
-        guard let windowScene =  UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let rootViewController =  windowScene.windows.first?.rootViewController else {
+        
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let rootViewController = windowScene.windows.first?.rootViewController else {
             throw NSError(domain: "NoRootVC", code: 0)
         }
-
+        
         let signInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
         let user = signInResult.user
+        
         guard let idToken = user.idToken?.tokenString else {
             throw NSError(domain: "MissingIDToken", code: 0)
         }
-
+        
         let accessToken = user.accessToken.tokenString
         let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
-
+        
         let authResult = try await Auth.auth().signIn(with: credential)
         self.userSession = authResult.user
+        
+        let uid = authResult.user.uid
+        let email = authResult.user.email ?? ""
+        let username = authResult.user.displayName ?? "Google User"
+        
+        let userDoc = Firestore.firestore().collection("users").document(uid)
+        let document = try await userDoc.getDocument()
+        
+        if !document.exists {
+            let user = User(id: uid, email: email, username: username)
+            self.currentUser = user
+            let encodedUser = try Firestore.Encoder().encode(user)
+            try await userDoc.setData(encodedUser)
+        } else {
+            try await loadUserData()
+        }
     }
+
         
     func signOut(){
             try? Auth.auth().signOut()

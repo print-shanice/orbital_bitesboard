@@ -11,6 +11,7 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
+import WidgetKit
 
 @MainActor
 class UploadPostViewModel: ObservableObject {
@@ -29,6 +30,14 @@ class UploadPostViewModel: ObservableObject {
         
     }
     
+    func saveImageForWidget(_ image: UIImage) {
+        if let data = image.jpegData(compressionQuality: 0.8) {
+            let defaults = UserDefaults(suiteName: "group.com.orbital.bitesboard")
+            defaults?.set(data, forKey: "lastReviewImage")
+        }
+    }
+
+    
     func uploadReview(restaurantName: String, caption: String, rating: Double, dietaryTags: [String], cuisine: String, price : Int) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         guard let uiImage = uiImage else {return}
@@ -39,6 +48,10 @@ class UploadPostViewModel: ObservableObject {
         guard let encodedReview = try? Firestore.Encoder().encode(review) else {return}
         
         try await postRef.setData(encodedReview)
+        
+        saveImageForWidget(uiImage)
+        WidgetCenter.shared.reloadTimelines(ofKind: "LastReviewWidget")
+
         
     }
 }
