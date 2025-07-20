@@ -51,9 +51,6 @@ struct SettingsView: View {
                     
                     Divider()
                     
-                    SettingsRowView(systemImageName: "bell", title: "Notifications", subtitle: "Control your notification settings", destination: AnyView(BookmarkView(user: user)))
-                    
-                    Divider()
                     
                     Button(action: {
                         AuthService.shared.signOut()
