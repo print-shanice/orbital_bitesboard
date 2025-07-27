@@ -5,6 +5,8 @@
 ## About 
 BitesBoard is an iOS mobile application designed to help users find personalised food recommendations and help users connect with one another. Try it out today!
 
+Note: You may only see the updated profile details and widget photo after relaunching the app. 
+
 ## Installation and Set-Up Guide
 
 ### Prerequisites
