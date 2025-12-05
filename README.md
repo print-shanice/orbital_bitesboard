@@ -1,9 +1,10 @@
 # Bitesboard
-![App Icon](https://github.com/print-shanice/orbital_bitesboard/blob/main/BitesBoard/BitesBoard/Assets.xcassets/AppIcon.appiconset/Icon_Art%20(Edit%20Me)-2.png)
 
 
 ## About 
 BitesBoard is an iOS mobile application designed to help users find personalised food recommendations and help users connect with one another. Try it out today!
+
+You may see the project's documentation by clicking [here](https://docs.google.com/document/d/1evfgyyIAwXGWB-WjX6CS8gPAJLrdbL2y2Nlz1GBHcTI/edit?usp=sharing)
 
 Note: You may only see the updated profile details and widget photo after relaunching the app. 
 
